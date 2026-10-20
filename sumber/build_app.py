@@ -23,5 +23,6 @@ style='<style>'+'\n'.join(faces)+'</style>'
 src=open('/home/claude/riyadus-salihin-reader.html').read()
 src=re.sub(r'<link rel="(preconnect|stylesheet)" href="https://fonts\.[^"]+"[^>]*>\n?','',src)
 src=src.replace('<title>','<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'+style+'\n<title>',1)
+src='<!-- RS_VERSION app page -->\n'+src
 open('/home/claude/app/app.html','w').write(src)
 print(len(faces),'faces',round(len(src)/1024),'KB', 'gfonts left:', src.count('fonts.googleapis'))

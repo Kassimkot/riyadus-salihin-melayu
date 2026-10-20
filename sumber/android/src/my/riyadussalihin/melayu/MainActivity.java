@@ -148,7 +148,7 @@ public class MainActivity extends Activity {
                     byte[] page = get(UPDATE_BASE + j.optString("page", "app.html") + "?v=" + v, 60000);
                     String sha = j.optString("sha256", "");
                     if (!sha.isEmpty() && !sha.equalsIgnoreCase(sha256(page))) throw new Exception("checksum");
-                    if (page.length < 50000 || !new String(page, 0, Math.min(page.length, 400000), "UTF-8").contains("RS_VERSION")) throw new Exception("invalid page");
+                    if (page.length < 50000 || !new String(page, "UTF-8").contains("RS_VERSION")) throw new Exception("invalid page");
                     File tmp = new File(getFilesDir(), "app.html.tmp");
                     OutputStream o = new FileOutputStream(tmp); o.write(page); o.close();
                     if (!tmp.renameTo(updFile())) throw new Exception("rename");
