@@ -1,0 +1,993 @@
+<meta charset="utf-8">
+<title>Riyadus Salihin Melayu</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: a single reading column like a printed kitab; bab index as a side rail on wide screens, a sheet on phones. */
+:root {
+  --paper: #f6f7f4;
+  --sheet: #ffffff;
+  --ink: #1d2422;
+  --ink-soft: #56615d;
+  --rule: #dfe4e0;
+  --jade: #0e6b58;
+  --jade-tint: #e3efe9;
+  --gold: #8a6a1f;
+  --mark: #fbf0c9;
+  --matn: #8a3b12; --matn-tint: #f6e6da;
+  --ul-y: #b8860b; --ul-g: #1f7a55; --ul-p: #c0392b;
+  --hl-y: #fbe7a6; --hl-g: #cfe9d9; --hl-p: #f6d3dc; --shadow: 0 10px 30px rgb(20 30 25 / .18);
+  --font-ar: "Amiri", "Scheherazade New", "Noto Naskh Arabic", "Traditional Arabic", serif;
+  --font-body: "Gentium Book Plus", "Georgia", "Times New Roman", serif;
+  --font-ui: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --scale: 1;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="sepia"]) {
+    --paper: #121816; --sheet: #18201d; --ink: #e4ebe7; --ink-soft: #9aa8a2;
+    --rule: #2a3531; --jade: #5fc0a6; --jade-tint: #1d3029; --gold: #d2b46a; --mark: #4a4120;
+    --matn: #f0a479; --matn-tint: #3d2a1f; --ul-y: #e0b44a; --ul-g: #5fc596; --ul-p: #f07a6a; --hl-y: #5a4b1c; --hl-g: #1f4a39; --hl-p: #5a2a37; --shadow: 0 10px 30px rgb(0 0 0 / .5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #121816; --sheet: #18201d; --ink: #e4ebe7; --ink-soft: #9aa8a2;
+  --rule: #2a3531; --jade: #5fc0a6; --jade-tint: #1d3029; --gold: #d2b46a; --mark: #4a4120;
+  --matn: #f0a479; --matn-tint: #3d2a1f; --ul-y: #e0b44a; --ul-g: #5fc596; --ul-p: #f07a6a; --hl-y: #5a4b1c; --hl-g: #1f4a39; --hl-p: #5a2a37; --shadow: 0 10px 30px rgb(0 0 0 / .5);
+  color-scheme: dark;
+}
+:root[data-theme="sepia"] {
+  --paper: #f3ead5; --sheet: #fbf5e6; --ink: #3a2e20; --ink-soft: #6e5f4b; --rule: #e2d4b5; --gold: #86651c; --mark: #f5e2a8;
+  --shadow: 0 10px 30px rgb(60 40 10 / .18);
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 72px); }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 16px; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--sheet); }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--jade); outline-offset: 2px; border-radius: 4px; }
+
+/* Top bar */
+.bar { position: sticky; isolation: isolate; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--sheet); border-bottom: 1px solid var(--rule);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 10px; }
+.bar-in { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+.brand { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
+.brand .ar { font-family: var(--font-ar); font-size: 26px; color: var(--jade); line-height: 1; }
+.brand .lat { font-family: var(--font-ui); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); white-space: nowrap; }
+.search { flex: 1; min-width: 0; display: flex; }
+.search input { width: 100%; min-width: 0; border: 1px solid var(--rule); background: var(--paper); border-radius: 999px; padding: 8px 14px; font-family: var(--font-ui); font-size: 14px; }
+.icon-btn { flex: none; border: 1px solid var(--rule); background: var(--sheet); border-radius: 999px; height: 36px; padding: 0 12px; font-family: var(--font-ui); font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
+.icon-btn[aria-pressed="true"] { background: var(--jade-tint); border-color: var(--jade); color: var(--jade); }
+.only-narrow { display: none; }
+.brand { flex: 1; }
+.tools { display: flex; gap: 2px; flex: none; }
+.tb { position: relative; width: 40px; height: 40px; display: inline-grid; place-items: center; border: 0; background: transparent; border-radius: 10px; color: var(--ink); padding: 0; }
+.tb:hover { background: var(--jade-tint); }
+.tb[aria-pressed="true"], .tb[aria-expanded="true"] { background: var(--jade-tint); color: var(--jade); }
+.tb.sm { width: 36px; height: 36px; font-size: 20px; color: var(--ink-soft); }
+.badge { position: absolute; top: 3px; right: 2px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: var(--jade); color: var(--sheet); font: 600 10px/16px var(--font-ui); }
+.searchrow { max-width: 1120px; margin: 8px auto 0; display: flex; gap: 6px; align-items: center; }
+.panel { position: absolute; top: calc(100% + 6px); right: max(12px, calc((100vw - 1120px) / 2)); width: min(360px, calc(100vw - 24px)); max-height: min(70vh, 560px); overflow: auto;
+  background: var(--sheet); border: 1px solid var(--rule); border-radius: 14px; box-shadow: var(--shadow); padding: 14px; font-family: var(--font-ui); font-size: 14px; display: grid; gap: 12px; }
+.prow { display: grid; gap: 6px; }
+.plbl { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); font-weight: 600; }
+.panel .grp { display: flex; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+.panel .grp button { flex: 1; border: 0; background: transparent; padding: 8px 10px; font-size: 13.5px; }
+.panel .grp button + button { border-left: 1px solid var(--rule); }
+.panel .grp button[aria-pressed="true"] { background: var(--jade-tint); color: var(--jade); font-weight: 600; }
+.plist { display: grid; border-top: 1px solid var(--rule); }
+.sw { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 0; border-bottom: 1px solid var(--rule); background: transparent; padding: 11px 2px; text-align: left; font-size: 14px; }
+.sw i { flex: none; width: 36px; height: 20px; border-radius: 10px; background: var(--rule); position: relative; transition: background .15s; }
+.sw i::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--sheet); box-shadow: 0 1px 2px rgb(0 0 0 / .25); transition: left .15s; }
+.sw[aria-pressed="true"] i { background: var(--jade); }
+.sw[aria-pressed="true"] i::after { left: 18px; }
+.nlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.nlist button { width: 100%; text-align: left; border: 0; background: transparent; border-radius: 8px; padding: 8px; display: grid; gap: 2px; }
+.nlist button:hover { background: var(--jade-tint); }
+.nlist .meta { font-size: 11.5px; color: var(--ink-soft); }
+.nlist .qt { font-family: var(--font-body); font-size: 15px; }
+.nlist .qt[lang="ar"] { font-family: var(--font-ar); font-size: 18px; }
+.nlist .tx { font-size: 13px; color: var(--ink-soft); white-space: pre-line; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.chip { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.addn { border: 1px dashed var(--jade); color: var(--jade); background: transparent; border-radius: 10px; padding: 9px 12px; font-weight: 500; }
+.selbar .tool[aria-pressed="true"] { outline: 2px solid var(--paper); outline-offset: 2px; }
+body.noindex .wrap { grid-template-columns: minmax(0, 1fr); max-width: 820px; }
+body.noindex .wrap > .index { display: none; }
+body.pen #main { padding-bottom: 140px; }
+body.pen .toast { bottom: calc(130px + env(safe-area-inset-bottom, 0px)); }
+.brand .ar { white-space: nowrap; }
+.search input::-webkit-search-cancel-button { display: none; }
+@media (max-width: 420px) { .brand .ar { font-size: 22px; } .tb { width: 38px; } }
+
+
+/* Page */
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 80px; }
+.index{ position: sticky; top: calc(env(safe-area-inset-top, 0px) + 80px); align-self: start; max-height: calc(100vh - 140px); overflow: auto; font-family: var(--font-ui); }
+.index h2, .sheet h2{ font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 10px; font-weight: 600; }
+.index ol, .sheet ol{ list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.index a, .sheet a{ display: grid; grid-template-columns: 26px 1fr auto; gap: 8px; padding: 8px 10px; border-radius: 8px; text-decoration: none; color: var(--ink); font-size: 14px; }
+.index a:hover, .sheet a:hover{ background: var(--jade-tint); }
+.index a.on, .sheet a.on{ background: var(--jade-tint); color: var(--jade); font-weight: 600; }
+.sheet { font-family: var(--font-ui); }
+.index .n, .sheet .n{ color: var(--gold); font-variant-numeric: tabular-nums; }
+.index .c, .sheet .c{ color: var(--ink-soft); font-size: 12px; font-variant-numeric: tabular-nums; }
+.index .todo, .sheet .todo{ margin-top: 14px; padding: 12px; border: 1px dashed var(--rule); border-radius: 8px; font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; }
+
+main { min-width: 0; }
+.notice { font-family: var(--font-ui); font-size: 13.5px; line-height: 1.55; color: var(--ink-soft); background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; margin-bottom: 28px; max-width: 70ch; }
+.notice strong { color: var(--ink); }
+
+.bab { margin-bottom: 44px; }
+.bab-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; border-bottom: 2px solid var(--jade); padding-bottom: 10px; margin-bottom: 8px; }
+.bab-head .num { font-family: var(--font-ui); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+.bab-head h2 { margin: 0; font-size: calc(26px * var(--scale)); font-weight: 700; text-wrap: balance; }
+.bab-head .range { margin-left: auto; font-family: var(--font-ui); font-size: 12.5px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+.hadith { padding-block: 26px; border-bottom: 1px solid var(--rule); }
+.hadith:target .h-no { background: var(--gold); color: var(--sheet); }
+.h-top { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; font-family: var(--font-ui); }
+.h-no { display: inline-grid; place-items: center; min-width: 38px; height: 38px; padding: 0 8px; border: 1.5px solid var(--gold); color: var(--gold); border-radius: 50%; font-weight: 600; font-size: 14px; font-variant-numeric: tabular-nums; }
+.h-src { font-size: 13px; color: var(--jade); font-weight: 500; }
+.h-tag { font-size: 11.5px; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--rule); color: var(--ink-soft); }
+.h-tag.on { border-color: var(--jade); color: var(--jade); }
+.h-act { margin-left: auto; display: flex; gap: 6px; }
+.h-act button { border: 1px solid var(--rule); background: transparent; border-radius: 999px; padding: 5px 11px; font-size: 12.5px; color: var(--ink-soft); }
+.h-act button[aria-pressed="true"] { color: var(--gold); border-color: var(--gold); }
+
+.ar-text { font-family: var(--font-ar); direction: rtl; text-align: right; font-size: calc(24px * var(--scale)); line-height: 2.35; margin: 0 0 18px; color: var(--ink); white-space: pre-line; }
+.ms-text { font-size: calc(17.5px * var(--scale)); line-height: 1.75; margin: 0; max-width: 68ch; }
+.ms-text p { margin: 0 0 .9em; }
+.ms-text p:last-child { margin-bottom: 0; }
+.ms-text .arq { font-family: var(--font-ar); font-size: 1.2em; color: var(--jade); }
+.takhrij { margin-top: 14px; font-family: var(--font-ui); font-size: calc(13.5px * var(--scale)); color: var(--ink-soft); }
+.takhrij b { color: var(--jade); font-weight: 600; }
+
+.extra { margin-top: 14px; display: grid; gap: 10px; max-width: 68ch; }
+.box { border-radius: 10px; padding: 12px 14px; font-family: var(--font-ui); font-size: calc(13.5px * var(--scale)); line-height: 1.6; }
+.box h3 { margin: 0 0 6px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; }
+.box.quran { background: var(--jade-tint); }
+.box.quran h3 { color: var(--jade); }
+.box.quran .ref { font-weight: 600; color: var(--jade); }
+.box.quran .src { margin-top: 8px; font-size: 12px; color: var(--ink-soft); }
+.box.note { border: 1px solid var(--rule); background: var(--sheet); }
+.box.note h3 { color: var(--ink-soft); }
+.box.tn { border: 1px dashed var(--gold); }
+.box.tn h3 { color: var(--gold); }
+.box p { margin: 0; }
+.box ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+
+mark { background: var(--mark); color: inherit; border-radius: 2px; padding: 0 1px; }
+.hide-ar .ar-text { display: none; }
+.hide-ms .ms-text { display: none; }
+.bab-ayat { display: grid; gap: 0; }
+.ayat-item { padding-block: 22px; border-bottom: 1px solid var(--rule); }
+.ayat-lead { font-family: var(--font-ui); font-size: 13px; color: var(--ink-soft); margin-bottom: 10px; }
+.ayat-lead .ref { color: var(--jade); font-weight: 600; }
+.ayat-ar { color: var(--jade); }
+.ayat-tr { font-family: var(--font-ui); font-size: calc(14px * var(--scale)); line-height: 1.6; color: var(--ink-soft); margin: 0; max-width: 68ch; }
+.bab-ayat .box.quran { margin-top: 14px; }
+.ms-text a { color: var(--jade); }
+.bab-nota { font-family: var(--font-ui); font-size: 14px; color: var(--ink-soft); line-height: 1.6; padding-block: 14px 0; margin: 0; max-width: 68ch; }
+.empty { font-family: var(--font-ui); color: var(--ink-soft); padding: 40px 0; text-align: center; }
+
+.sheet-bg { position: fixed; inset: 0; background: rgb(0 0 0 / .35); z-index: 20; }
+.sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 21; background: var(--sheet); border-radius: 16px 16px 0 0; max-height: 75vh; overflow: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 18px calc(18px + env(safe-area-inset-bottom, 0px)); }
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--paper); font-family: var(--font-ui); font-size: 13px; padding: 9px 16px; border-radius: 999px; z-index: 30; }
+
+/* Teacher annotations */
+/* Prophetic words (qawl) and actions (fi'l) */
+.nb-q { color: var(--matn); font-weight: 700; }
+.nb-f { background: var(--matn-tint); border-radius: 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; font-size: 13px; }
+.legend .nb-q, .legend .nb-f { padding: 0 4px; }
+.ann { border-radius: 3px; padding: 0 1px; cursor: pointer; color: inherit; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.ann::after { content: attr(data-n); font-family: var(--font-ui); font-size: .58em; font-weight: 600; vertical-align: super; line-height: 0; margin-inline-start: 2px; color: var(--gold); }
+.ann.t-serlah.c-y { background: var(--hl-y); } .ann.t-serlah.c-g { background: var(--hl-g); } .ann.t-serlah.c-p { background: var(--hl-p); }
+.ann.t-garis { background: transparent; border-radius: 0; text-decoration: underline 2.5px var(--ul-p); text-underline-offset: 4px; text-decoration-skip-ink: none; }
+.ann.t-garis.c-y { text-decoration-color: var(--ul-y); } .ann.t-garis.c-g { text-decoration-color: var(--ul-g); }
+.ar-text .ann.t-garis { text-underline-offset: 7px; }
+.ann.bare::after { content: none; }
+.ann.t-nota { background: transparent; border-bottom: 2px dotted var(--gold); border-radius: 0; }
+.ann.t-pindaan { background: transparent; text-decoration: underline wavy var(--jade); text-decoration-thickness: 1.5px; text-underline-offset: 5px; }
+.ann.t-pindaan.alt-on { background: var(--jade-tint); text-decoration: none; }
+.ann.flash { outline: 2px solid var(--gold); outline-offset: 2px; }
+.box.guru { border: 1px solid var(--gold); background: var(--sheet); }
+.box.saya { border: 1px dashed var(--jade); background: var(--sheet); }
+.box.saya h3 { color: var(--jade); display: flex; align-items: center; gap: 8px; }
+.box.saya .ann-n { background: var(--jade); }
+.ann.s-saya::after { color: var(--jade); }
+.box h3 .sub { margin-left: auto; text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--ink-soft); font-size: 11.5px; }
+.scope { display: flex; gap: 8px; flex-wrap: wrap; }
+.scope label { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--rule); border-radius: 999px; padding: 6px 12px; color: var(--ink); font-size: 13.5px; cursor: pointer; }
+.scope input { accent-color: var(--jade); }
+.box.guru h3 { color: var(--gold); display: flex; align-items: center; gap: 8px; }
+.ann-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.ann-list li { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 8px; }
+.ann-n { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--gold); color: var(--sheet); font-size: 11.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ann-kind { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); font-weight: 600; }
+.ann-quote { color: var(--ink); }
+.ann-quote[lang="ar"] { font-family: var(--font-ar); font-size: 1.25em; }
+.ann-alt { color: var(--jade); font-weight: 500; }
+.ann-text { white-space: pre-line; color: var(--ink); }
+.ann-tools { display: flex; gap: 6px; margin-top: 4px; }
+.ann-tools button, .tbtn { border: 1px solid var(--rule); background: transparent; border-radius: 999px; padding: 4px 10px; font-size: 12px; color: var(--ink-soft); font-family: var(--font-ui); }
+.ann-tools button.danger { color: #b3261e; border-color: currentColor; }
+.ann-missing { font-size: 12px; color: #b3261e; }
+.only-teacher { display: none !important; }
+body.teacher .only-teacher { display: inline-flex !important; }
+.teacher-chip { border: 1px solid var(--gold); color: var(--gold); border-radius: 999px; padding: 5px 10px; font-weight: 600; }
+.pop { position: absolute; z-index: 25; width: min(340px, calc(100vw - 32px)); background: var(--sheet); color: var(--ink); border: 1px solid var(--rule); border-radius: 12px; box-shadow: var(--shadow); padding: 12px 14px; font-family: var(--font-ui); font-size: 14px; line-height: 1.55; display: grid; gap: 6px; }
+.pop .row { display: flex; align-items: center; gap: 8px; }
+.pop .x { margin-left: auto; border: 0; background: transparent; font-size: 18px; color: var(--ink-soft); line-height: 1; }
+.selbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 26; background: var(--ink); color: var(--paper); font-family: var(--font-ui); font-size: 14px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 10px calc(10px + env(safe-area-inset-bottom, 0px));
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.selbar .q { flex: 1 1 160px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; opacity: .8; }
+.selbar button { border: 1px solid rgb(255 255 255 / .35); background: transparent; color: inherit; border-radius: 999px; padding: 7px 13px; font-size: 13.5px; }
+.selbar .dot { width: 30px; height: 30px; padding: 0; border-radius: 50%; border: 2px solid rgb(255 255 255 / .55); }
+.selbar .ul { font-weight: 700; text-decoration: underline 2.5px var(--ul-p); text-underline-offset: 3px; }
+.selbar .grp { display: flex; gap: 6px; align-items: center; }
+.selbar button.pri { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.modal-bg { position: fixed; inset: 0; z-index: 40; background: rgb(0 0 0 / .4); display: grid; place-items: center; padding: 16px; }
+.modal { width: min(480px, 100%); max-height: 90vh; overflow: auto; background: var(--sheet); color: var(--ink); border-radius: 14px; box-shadow: var(--shadow); padding: 18px; font-family: var(--font-ui); display: grid; gap: 12px; }
+.modal h2 { margin: 0; font-size: 17px; }
+.modal label { display: grid; gap: 6px; font-size: 13px; color: var(--ink-soft); }
+.modal textarea { width: 100%; min-height: 90px; border: 1px solid var(--rule); border-radius: 8px; padding: 10px; background: var(--paper); font-family: var(--font-body); font-size: 15px; line-height: 1.5; resize: vertical; }
+.modal .quote { background: var(--paper); border-radius: 8px; padding: 10px; font-family: var(--font-body); font-size: 15px; }
+.modal .quote[lang="ar"] { font-family: var(--font-ar); font-size: 20px; direction: rtl; text-align: right; }
+.swatches { display: flex; gap: 8px; }
+.swatches input { position: absolute; opacity: 0; pointer-events: none; }
+.swatches span { display: inline-block; width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--rule); cursor: pointer; }
+.swatches input:checked + span { border-color: var(--ink); box-shadow: 0 0 0 2px var(--sheet) inset; }
+.swatches input:focus-visible + span { outline: 2px solid var(--jade); outline-offset: 2px; }
+.modal .btns { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+.modal .btns button { border: 1px solid var(--rule); background: transparent; border-radius: 999px; padding: 8px 16px; font-size: 14px; }
+.modal .btns button.pri { background: var(--jade); color: var(--sheet); border-color: var(--jade); font-weight: 600; }
+body.no-ann .ann { background: transparent !important; border: 0 !important; text-decoration: none !important; cursor: auto; }
+body.no-ann .ann::after, body.no-ann .box.guru { display: none; }
+
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 0; padding-block: 20px 60px; }
+  .wrap > .index { display: none; }
+  .only-narrow { display: inline-flex; }
+  .brand .lat { display: none; }
+}
+@media (max-width: 480px) {
+  .h-act button .lbl { display: none; }
+  .bab-head .range { margin-left: 0; width: 100%; }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+.set-row { display: grid; gap: 8px; }
+.opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.opts button { border: 1px solid var(--rule); background: var(--sheet); border-radius: 999px; padding: 6px 12px; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
+.opts button[aria-pressed="true"] { border-color: var(--jade); background: var(--jade-tint); color: var(--jade); font-weight: 600; }
+.opts .dotc { width: 14px; height: 14px; border-radius: 50%; display: inline-block; border: 1px solid rgb(0 0 0 / .12); }
+.cswatch { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.cswatch .lbl2 { width: 100%; font-size: 13px; color: var(--ink-soft); }
+.cswatch button { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--rule); padding: 0; }
+.cswatch button[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 0 2px var(--sheet) inset; }
+.preview { border: 1px solid var(--rule); border-radius: 10px; padding: 10px 12px; font-family: var(--font-body); font-size: 15px; line-height: 1.9; background: var(--paper); }
+.linkbtn { border: 0; background: none; color: var(--jade); text-decoration: underline; padding: 0; font-size: 13px; justify-self: start; }
+@media (max-width: 420px) { .tools { gap: 0; } .tb { width: 34px; height: 38px; } .tb svg { width: 20px; height: 20px; } .brand .ar { font-size: 19px; } .bar { padding-left: 12px; padding-right: 8px; } }
+.brand { overflow: hidden; }
+</style>
+<style id="userTheme"></style>
+
+<header class="bar">
+  <div class="bar-in">
+    <div class="brand"><span class="ar">رياض الصالحين</span><span class="lat">Riyadus Salihin · Melayu</span></div>
+    <div class="tools" role="toolbar" aria-label="Alat">
+      <button type="button" class="tb" id="openIndex" title="Senarai bab" aria-label="Senarai bab"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <button type="button" class="tb" id="btnView" title="Paparan" aria-label="Paparan" aria-expanded="false" aria-controls="pView"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+      <button type="button" class="tb" id="btnPen" title="Pen: serlah, garis, pindaan" aria-label="Pen" aria-pressed="false"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4z"/><path d="M14.5 5.5l3 3"/></svg></button>
+      <button type="button" class="tb" id="btnNotes" title="Nota saya" aria-label="Nota saya" aria-expanded="false" aria-controls="pNotes"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5z"/><path d="M9 3v18M3 7h4M3 11h4M3 15h4"/></svg><span class="badge" id="noteCount" hidden></span></button>
+      <button type="button" class="tb" id="btnSearch" title="Cari" aria-label="Cari" aria-expanded="false"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+      <button type="button" class="tb" id="btnSet" title="Tetapan" aria-label="Tetapan" aria-expanded="false" aria-controls="pSet"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+    </div>
+  </div>
+  <div class="searchrow" id="searchRow" hidden>
+    <label class="search" for="q"><span hidden>Cari</span><input id="q" type="search" placeholder="Cari kata, perawi atau nombor hadis" autocomplete="off"></label>
+    <button type="button" class="tb sm" id="qClose" aria-label="Tutup carian">×</button>
+  </div>
+  <div class="panel" id="pView" role="dialog" aria-label="Paparan" hidden>
+    <div class="prow"><span class="plbl">Teks</span>
+      <span class="grp">
+        <button type="button" id="v-both" data-view="both" aria-pressed="true">Arab + Melayu</button>
+        <button type="button" id="v-ms" data-view="ms" aria-pressed="false">Melayu</button>
+        <button type="button" id="v-ar" data-view="ar" aria-pressed="false">Arab</button>
+      </span></div>
+    <div class="prow"><span class="plbl">Saiz tulisan</span>
+      <span class="grp" aria-label="Saiz tulisan">
+        <button type="button" id="fs-down" aria-label="Kecilkan tulisan">A−</button>
+        <button type="button" id="fs-up" aria-label="Besarkan tulisan">A+</button>
+      </span></div>
+    <div class="plist">
+      <button type="button" class="sw" id="barisToggle" aria-pressed="true"><span>Baris pada teks Arab</span><i></i></button>
+      <button type="button" class="sw" id="nabToggle" aria-pressed="true"><span>Serlah sabda &amp; perbuatan Nabi ﷺ</span><i></i></button>
+      <button type="button" class="sw" id="annToggle" aria-pressed="true"><span>Serlahan, garis &amp; nota saya</span><i></i></button>
+      <button type="button" class="sw" id="altToggle" aria-pressed="false"><span>Pindaan saya dalam teks</span><i></i></button>
+      <button type="button" class="sw" id="onlyMarks" aria-pressed="false"><span>Hadis bertanda ★ sahaja</span><i></i></button>
+    </div>
+  </div>
+  <div class="panel" id="pNotes" role="dialog" aria-label="Nota saya" hidden></div>
+  <div class="panel" id="pSet" role="dialog" aria-label="Tetapan" hidden></div>
+</header>
+
+<div class="wrap">
+  <nav class="index" id="index" aria-label="Senarai bab"></nav>
+  <main id="main">
+    <div class="notice" id="notice"></div>
+    <div id="list"></div>
+  </main>
+</div>
+
+<div class="sheet-bg" id="sheetBg" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-label="Senarai bab" hidden></div>
+<div class="toast" id="toast" hidden></div>
+<div class="pop" id="pop" role="dialog" aria-label="Nota guru" hidden></div>
+<div class="selbar" id="selbar" hidden></div>
+<div class="modal-bg" id="modalBg" hidden><form class="modal" id="modal" novalidate></form></div>
+
+<script>
+const DATA = __DATA__;
+window.RS_VERSION = window.RS_VERSION || '__VERSION__';
+const $ = s => document.querySelector(s);
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+let marks = new Set(store.get('rs-marks', []));
+let view = store.get('rs-view', 'both');
+let scale = store.get('rs-scale', 1);
+let onlyMarks = false;
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const babs = [];
+DATA.hadith.forEach(h => {
+  let b = babs[babs.length - 1];
+  if (!b || b.title !== h.bab) { b = { title: h.bab, items: [] }; babs.push(b); }
+  b.items.push(h);
+});
+babs.forEach((b, i) => { const m = b.title.match(/^(\d+)\.\s*(.*)$/); b.n = m ? m[1] : String(i + 1); b.name = (m ? m[2] : b.title).replace(/^Bab\s+/i, ''); b.id = 'bab-' + b.n; });
+(DATA.bab_kosong || []).forEach(e => { const m = e.bab.match(/^(\d+)\.\s*(.*)$/); babs.push({ title: e.bab, items: [], n: m[1], name: m[2].replace(/^Bab\s+/i, ''), id: 'bab-' + m[1], nota: e.nota, raw: e }); });
+babs.sort((a, b) => a.n - b.n);
+
+$('#notice').innerHTML = '<strong>Draf terjemahan, belum disemak.</strong> Terjemahan Melayu dibuat oleh AI daripada teks Arab dan perlu disemak oleh ahli ilmu sebelum dijadikan rujukan. ' +
+  'Baris (harakat) pada teks Arab juga ditambah oleh AI dan perlu disemak. Nombor hadis mengikut susunan sunnah.com. Sudah siap: <strong>' + DATA.hadith.length + ' daripada ' + DATA.total + '</strong> hadis.<br><strong>Nota peribadi:</strong> tekan ikon pen, pilih teks, kemudian pilih warna serlahan, garis, nota atau pindaan. Semua nota anda terkumpul di ikon buku nota. Teks asal tidak berubah, dan nota anda tidak dilihat oleh orang lain.' +
+  '<div class="legend"><span><span class="nb-q">Tulisan tebal berwarna</span> = sabda Nabi ﷺ</span><span><span class="nb-f">Latar berwarna</span> = perbuatan Nabi ﷺ</span></div>';
+
+function srcLabel(t) {
+  if (/^Muttafaq/.test(t)) return 'Muttafaq ʿalaih';
+  const m = t.match(/^Riwayat ([^,.]+?)(?:[,.]|$)/);
+  return m ? 'Riwayat ' + m[1] : '';
+}
+let ANN = new Map();      // shared teacher notes
+let MINE_DB = new Map();  // personal notes kept in the artifact store
+let MINE_LOCAL = new Map(); // personal notes kept in this browser
+let uid = null, personalMode = 'local';
+const LKEY = 'rs-nota-saya';
+function loadLocal() { MINE_LOCAL = new Map(); (store.get(LKEY, []) || []).forEach(a => { if (!MINE_LOCAL.has(a.no)) MINE_LOCAL.set(a.no, []); MINE_LOCAL.get(a.no).push(Object.assign({}, a, { scope: 'saya', local: true })); }); }
+function saveLocal() { const all = []; MINE_LOCAL.forEach(l => l.forEach(a => { const c = Object.assign({}, a); delete c.local; delete c.scope; all.push(c); })); store.set(LKEY, all); }
+loadLocal();
+let annOn = store.get('rs-ann', true);
+let altInline = store.get('rs-alt', false);
+let db = null, canWrite = false, annReady = false;
+const HMAP = new Map(DATA.hadith.map(h => [h.no, h]));
+const KIND = { serlah: 'Serlahan', garis: 'Garis bawah', nota: 'Nota', pindaan: 'Pindaan terjemahan', umum: 'Nota umum' };
+const LETTERS = 'abcdefghijklmnopqrstuvwxyz';
+const lblOf = (a, i) => String(i + 1);
+
+function findOcc(text, quote, occ) { let i = -1; for (let k = 0; k <= occ; k++) { i = text.indexOf(quote, i + 1); if (i < 0) return -1; } return i; }
+function sortNumber(list, h) {
+  const fo = { ar: 0, ms: 1 };
+  list.forEach(a => { a.pos = a.field ? findOcc(h[a.field] || '', a.quote || '', a.occ || 0) : -1; });
+  list.sort((a, b) => {
+    const ka = a.field ? (a.pos < 0 ? 2 : fo[a.field]) : 3, kb = b.field ? (b.pos < 0 ? 2 : fo[b.field]) : 3;
+    return ka - kb || (a.pos - b.pos) || ((a.at || 0) - (b.at || 0));
+  });
+  list.forEach((a, i) => { a.n = lblOf(a, i); });
+  return list;
+}
+function prepAnns(h) {
+  const g = sortNumber((ANN.get(h.no) || []).map(a => Object.assign({}, a, { scope: 'guru' })), h);
+  const s = sortNumber([...(MINE_DB.get(h.no) || []), ...(MINE_LOCAL.get(h.no) || [])].map(a => Object.assign({}, a, { scope: 'saya' })), h);
+  h._g = g; h._s = s; h._anns = g.concat(s);
+  return h._anns;
+}
+function overlaps(r, list) { return list.some(x => r.s < x.e && x.s < r.e); }
+let nabOn = store.get('rs-nab', true);
+function annRanges(text, h, field) {
+  const R = [];
+  for (const a of (h._anns || [])) {
+    if (a.field !== field || a.pos < 0) continue;
+    const r = { s: a.pos, e: a.pos + a.quote.length, a };
+    if (!overlaps(r, R)) R.push(r);
+  }
+  return R.sort((x, y) => x.s - y.s);
+}
+/* Render text[from,to) with three layers: personal notes (outer <mark>), Prophetic words/actions (<span>), search hits (<mark>). */
+function layered(text, from, to, anns, nab, q) {
+  const S = [];
+  if (q) { const lt = text.toLowerCase(), lq = q.toLowerCase(); let i = lt.indexOf(lq, from); while (i >= 0 && i < to) { S.push([i, Math.min(i + lq.length, to)]); i = lt.indexOf(lq, i + lq.length); } }
+  const cuts = new Set([from, to]);
+  const add = (s, e) => { if (e > from && s < to) { cuts.add(Math.max(s, from)); cuts.add(Math.min(e, to)); } };
+  anns.forEach(r => add(r.s, r.e)); nab.forEach(r => add(r[0], r[1])); S.forEach(r => add(r[0], r[1]));
+  const pts = [...cuts].sort((x, y) => x - y);
+  const inR = (x, list, f) => list.find(r => f(r)[0] <= x && x < f(r)[1]);
+  let out = '', cur = null;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const x = pts[i], y = pts[i + 1];
+    const ar = inR(x, anns, r => [r.s, r.e]);
+    if (ar !== cur) {
+      if (cur) out += '</mark>';
+      cur = ar || null;
+      if (cur) {
+        const a = cur.a, alt = a.type === 'pindaan' && altInline && a.alt;
+        out += '<mark class="ann t-' + esc(a.type) + ' c-' + esc(a.color || 'y') + (alt ? ' alt-on' : '') + (a.scope === 'saya' ? ' s-saya' : '') + ((a.type === 'serlah' || a.type === 'garis') && !a.text ? ' bare' : '') + '" data-ann="' + esc(a.id) + '" data-n="' + esc(a.n) + '" tabindex="0" role="button" aria-label="Nota ' + esc(a.n) + '">';
+        if (alt) {
+          const nb = inR(cur.s, nab, r => r);
+          out += (nb && nabOn ? '<span class="nb nb-' + nb[2] + '">' : '') + esc(a.alt) + (nb && nabOn ? '</span>' : '');
+          continue;
+        }
+      }
+    } else if (cur && cur.a.type === 'pindaan' && altInline && cur.a.alt) continue;
+    const nb = nabOn ? inR(x, nab, r => r) : null, hit = inR(x, S, r => r);
+    let seg = esc(text.slice(x, y)).replace(/\n/g, '<br>');
+    if (hit) seg = '<mark>' + seg + '</mark>';
+    if (nb) seg = '<span class="nb nb-' + nb[2] + '">' + seg + '</span>';
+    out += seg;
+  }
+  if (cur) out += '</mark>';
+  return out;
+}
+function markup(text, h, field, q) {
+  const nab = (h.nabawi && h.nabawi[field]) || [];
+  return layered(text, 0, text.length, field ? annRanges(text, h, field) : [], field ? nab : [], q).replace(/<br>/g, '\n');
+}
+function msHtml(h, q) {
+  const text = h.ms, anns = annRanges(text, h, 'ms'), nab = (h.nabawi && h.nabawi.ms) || [];
+  const parts = []; const re = /\n\n+/g; let last = 0, m;
+  while ((m = re.exec(text))) { parts.push([last, m.index]); last = m.index + m[0].length; }
+  parts.push([last, text.length]);
+  return parts.map(([a, b]) => {
+    let x = layered(text, a, b, anns, nab, q);
+    x = x.replace(/\{([^}]+)\}/g, '<span class="arq" dir="rtl" lang="ar">﴿$1﴾</span>');
+    return '<p>' + x + '</p>';
+  }).join('');
+}
+function hl(text, q) { return markup(text, { _anns: [] }, null, q); }
+function mayEdit(a) { return a.scope === 'saya' || (a.scope === 'guru' && canWrite); }
+function annItem(a) {
+  let body = '<span class="ann-kind">' + esc(KIND[a.type] || 'Nota') + '</span>';
+  if (a.field) body += '<div class="ann-quote" lang="' + (a.field === 'ar' ? 'ar' : 'ms') + '"' + (a.field === 'ar' ? ' dir="rtl"' : '') + '>“' + esc(a.quote) + '”</div>';
+  if (a.field && a.pos < 0) body += '<div class="ann-missing">Teks ini tidak lagi ditemui dalam hadis.</div>';
+  if (a.type === 'pindaan' && a.alt) body += '<div class="ann-alt">→ ' + esc(a.alt) + '</div>';
+  if (a.text) body += '<div class="ann-text">' + esc(a.text) + '</div>';
+  if (mayEdit(a)) body += '<div class="ann-tools"><button type="button" data-edit="' + esc(a.id) + '">Sunting</button><button type="button" data-del="' + esc(a.id) + '">Padam</button></div>';
+  return '<li data-li="' + esc(a.id) + '"><span class="ann-n">' + esc(a.n) + '</span><div>' + body + '</div></li>';
+}
+function card(h, q) {
+  const anns = prepAnns(h);
+  const extras = [];
+  if (h._g.length) extras.push('<div class="box guru"><h3>Nota guru<span class="sub">dilihat oleh semua pelajar</span></h3><ol class="ann-list">' + h._g.map(annItem).join('') + '</ol></div>');
+  if (h._s.length) extras.push('<div class="box saya"><h3>Nota saya<span class="sub">' + (personalMode === 'db' ? 'peribadi, disegerakkan ke akaun anda' : 'peribadi, disimpan dalam peranti ini') + '</span></h3><ol class="ann-list">' + h._s.map(annItem).join('') + '</ol></div>');
+  if (h.ayat_quran) {
+    extras.push('<div class="box quran"><h3>Ayat al-Quran</h3><ul>' + h.ayat_quran.map(a =>
+      '<li><span class="ref">' + esc(a.rujukan) + ':</span> ' + esc(a.terjemahan) + '</li>').join('') +
+      '</ul><div class="src">' + esc(h.sumber_terjemahan_ayat || '') + '</div></div>');
+  }
+  if (h.catatan) extras.push('<div class="box note"><h3>Catatan Imam an-Nawawi</h3><p>' + esc(h.catatan) + '</p></div>');
+  if (h.catatan_penterjemah) extras.push('<div class="box tn"><h3>Nota penterjemah</h3><p>' + esc(h.catatan_penterjemah) + '</p></div>');
+  const on = marks.has(h.no);
+  return '<article class="hadith" id="h' + h.no + '" data-no="' + h.no + '">' +
+    '<div class="h-top"><span class="h-no">' + h.no + '</span><span class="h-src">' + esc(srcLabel(h.takhrij)) + '</span>' + (h.baris ? '<span class="h-tag on" title="Baris ditambah oleh AI, belum disemak">Berbaris</span>' : '<span class="h-tag">Tanpa baris</span>') +
+    '<span class="h-act"><button type="button" data-addnote="' + h.no + '" aria-label="Tambah nota umum untuk hadis ' + h.no + '">＋<span class="lbl"> Nota</span></button>' +
+    '<button type="button" data-copy="' + h.no + '" aria-label="Salin hadis ' + h.no + '">⧉<span class="lbl"> Salin</span></button>' +
+    '<button type="button" data-mark="' + h.no + '" aria-pressed="' + on + '" aria-label="Tanda hadis ' + h.no + '">' + (on ? '★' : '☆') + '<span class="lbl"> Tanda</span></button></span></div>' +
+    '<p class="ar-text" lang="ar" dir="rtl">' + markup(h.ar, h, 'ar', q) + '</p>' +
+    '<div class="ms-text" lang="ms">' + msHtml(h, q) + '</div>' +
+    '<div class="takhrij"><b>Takhrij:</b> ' + hl(h.takhrij, q) + '</div>' +
+    (extras.length ? '<div class="extra">' + extras.join('') + '</div>' : '') +
+    '</article>';
+}
+function babAyat(b) {
+  const e = b.raw || {};
+  if (!e.ayat) return '<p class="bab-nota">' + esc(b.nota || '') + '</p>';
+  let h = '<div class="bab-ayat">';
+  e.ayat.forEach((a, i) => {
+    h += '<div class="ayat-item"><div class="ayat-lead">' + (i === 0 ? 'Allah Ta‘ala berfirman:' : 'Dan firman-Nya:') + ' <span class="ref">' + esc(a.rujukan) + '</span></div>' +
+      '<p class="ar-text ayat-ar" lang="ar" dir="rtl">﴿' + esc(a.ar) + '﴾</p>' +
+      '<p class="ayat-tr">' + esc(a.terjemahan) + '</p></div>';
+  });
+  if (e.penutup_ar) h += '<div class="ayat-item"><p class="ar-text" lang="ar" dir="rtl">' + esc(e.penutup_ar) + '</p><div class="ms-text"><p>' + esc(e.penutup_ms) +
+    (e.rujuk ? ' <a href="#h' + e.rujuk + '">(Hadis ' + e.rujuk + ')</a>' : '') + '</p></div></div>';
+  h += '<div class="box quran"><div class="src">' + esc(e.sumber || '') + '</div></div></div>';
+  return h;
+}
+function render() {
+  const raw = $('#q').value.trim();
+  const q = raw.toLowerCase();
+  const num = /^\d+$/.test(raw) ? +raw : null;
+  let html = '', shown = 0;
+  babs.forEach(b => {
+    if (!b.items.length) {
+      if (!q && !onlyMarks) html += '<section class="bab" id="' + b.id + '"><div class="bab-head"><span class="num">Bab ' + b.n + '</span><h2>' + esc(b.name) + '</h2><span class="range">Ayat al-Quran sahaja</span></div>' + babAyat(b) + '</section>';
+      return;
+    }
+    const items = b.items.filter(h => {
+      if (onlyMarks && !marks.has(h.no)) return false;
+      if (!q) return true;
+      if (num !== null) return h.no === num;
+      return (h.ms + ' ' + h.takhrij + ' ' + h.ar).toLowerCase().includes(q);
+    });
+    if (!items.length) return;
+    shown += items.length;
+    const first = b.items[0].no, last = b.items[b.items.length - 1].no;
+    html += '<section class="bab" id="' + b.id + '"><div class="bab-head"><span class="num">Bab ' + b.n + '</span><h2>' + esc(b.name) + '</h2>' +
+      '<span class="range">Hadis ' + first + '–' + last + '</span></div>' +
+      items.map(h => card(h, num === null ? raw : '')).join('') + '</section>';
+  });
+  if (!shown) html = '<div class="empty">' + (onlyMarks && !q ? 'Belum ada hadis yang ditanda. Tekan ☆ Tanda pada mana-mana hadis.' : 'Tiada hadis yang sepadan dengan carian ini.') + '</div>';
+  $('#list').innerHTML = html;
+}
+function indexHtml() {
+  return '<h2>Kitab al-Muqaddimat</h2><ol>' + babs.map(b =>
+    '<li><a href="#' + b.id + '" data-bab="' + b.id + '"><span class="n">' + b.n + '</span><span>' + esc(b.name) + '</span><span class="c">' + (b.items.length ? b.items.length + ' hadis' : 'ayat') + '</span></a></li>').join('') +
+    '</ol><div class="todo">Bab 21 dan seterusnya sedang diterjemah.</div>';
+}
+$('#index').innerHTML = indexHtml();
+$('#sheet').innerHTML = indexHtml();
+
+function applyView() {
+  document.body.classList.toggle('hide-ar', view === 'ms');
+  document.body.classList.toggle('hide-ms', view === 'ar');
+  document.querySelectorAll('[data-view]').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === view));
+  document.documentElement.style.setProperty('--scale', scale);
+}
+document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => { view = b.dataset.view; store.set('rs-view', view); applyView(); }));
+$('#fs-up').addEventListener('click', () => { scale = Math.min(1.5, +(scale + 0.1).toFixed(2)); store.set('rs-scale', scale); applyView(); });
+$('#fs-down').addEventListener('click', () => { scale = Math.max(0.8, +(scale - 0.1).toFixed(2)); store.set('rs-scale', scale); applyView(); });
+$('#onlyMarks').addEventListener('click', e => { onlyMarks = !onlyMarks; e.currentTarget.setAttribute('aria-pressed', onlyMarks); render(); });
+let t; $('#q').addEventListener('input', () => { clearTimeout(t); t = setTimeout(render, 150); });
+
+function toast(msg) { const el = $('#toast'); el.textContent = msg; el.hidden = false; clearTimeout(el._t); el._t = setTimeout(() => el.hidden = true, 1800); }
+$('#list').addEventListener('click', e => {
+  const mk = e.target.closest('[data-mark]');
+  if (mk) {
+    const n = +mk.dataset.mark;
+    marks.has(n) ? marks.delete(n) : marks.add(n);
+    store.set('rs-marks', [...marks]);
+    const on = marks.has(n);
+    mk.setAttribute('aria-pressed', on); mk.firstChild.textContent = on ? '★' : '☆';
+    toast(on ? 'Hadis ' + n + ' ditanda' : 'Tanda dibuang');
+    if (onlyMarks) render();
+    return;
+  }
+  const cp = e.target.closest('[data-copy]');
+  if (cp) {
+    const h = DATA.hadith.find(x => x.no === +cp.dataset.copy);
+    const text = 'Riyadus Salihin, Hadis ' + h.no + '\n\n' + h.ar + '\n\n' + h.ms + '\n\n(' + h.takhrij + ')';
+    const ok = () => toast('Hadis ' + h.no + ' disalin');
+    try {
+      navigator.clipboard.writeText(text).then(ok, () => fallbackCopy(text, ok));
+    } catch (err) { fallbackCopy(text, ok); }
+  }
+});
+function fallbackCopy(text, ok) {
+  const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); ok(); } catch (e) { toast('Tidak dapat menyalin. Pilih teks secara manual.'); }
+  ta.remove();
+}
+
+const openSheet = () => { $('#sheet').hidden = false; $('#sheetBg').hidden = false; };
+const closeSheet = () => { $('#sheet').hidden = true; $('#sheetBg').hidden = true; };
+$('#sheetBg').addEventListener('click', closeSheet);
+$('#sheet').addEventListener('click', e => { if (e.target.closest('a')) closeSheet(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSheet(); closePanels(); } });
+
+const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => {
+  es.forEach(en => { if (en.isIntersecting) document.querySelectorAll('.index a').forEach(a => a.classList.toggle('on', a.dataset.bab === en.target.id)); });
+}, { rootMargin: '-30% 0px -60% 0px' }) : null;
+function observe() { if (io) { io.disconnect(); document.querySelectorAll('.bab').forEach(s => io.observe(s)); } }
+
+/* ---------- Teacher annotations: popover, selection bar, editor, storage ---------- */
+function findAnn(id) {
+  for (const [m, scope] of [[ANN, 'guru'], [MINE_DB, 'saya'], [MINE_LOCAL, 'saya']]) for (const list of m.values()) { const a = list.find(x => x.id === id); if (a) return Object.assign({}, a, { scope }); }
+  return null;
+}
+function numbered(id) { const a = findAnn(id); if (!a) return null; const h = HMAP.get(a.no); return (prepAnns(h).find(x => x.id === id)) || null; }
+const pop = $('#pop');
+function closePop() { pop.hidden = true; pop.innerHTML = ''; }
+function openPop(el, id) {
+  const a = numbered(id); if (!a) return;
+  let html = '<div class="row"><span class="ann-n"' + (a.scope === 'saya' ? ' style="background:var(--jade)"' : '') + '>' + esc(a.n) + '</span><span class="ann-kind">' + (a.scope === 'saya' ? 'Nota saya · ' : '') + esc(KIND[a.type] || 'Nota') + '</span><button type="button" class="x" data-close aria-label="Tutup">×</button></div>';
+  if (a.type === 'pindaan') {
+    html += '<div><span class="ann-kind">Terjemahan asal</span><div class="ann-quote">“' + esc(a.quote) + '”</div></div>';
+    if (a.alt) html += '<div><span class="ann-kind">Pindaan anda</span><div class="ann-alt">' + esc(a.alt) + '</div></div>';
+  } else if (a.field) {
+    html += '<div class="ann-quote" lang="' + (a.field === 'ar' ? 'ar' : 'ms') + '"' + (a.field === 'ar' ? ' dir="rtl"' : '') + '>“' + esc(a.quote) + '”</div>';
+  }
+  if (a.text) html += '<div class="ann-text">' + esc(a.text) + '</div>';
+  if (mayEdit(a)) html += '<div class="ann-tools"><button type="button" data-edit="' + esc(a.id) + '">Sunting</button><button type="button" data-del="' + esc(a.id) + '">Padam</button></div>';
+  pop.innerHTML = html; pop.hidden = false;
+  const r = el.getBoundingClientRect(), pw = pop.offsetWidth, ph = pop.offsetHeight;
+  let left = Math.min(Math.max(16, r.left + window.scrollX), window.scrollX + document.documentElement.clientWidth - pw - 16);
+  let top = r.bottom + window.scrollY + 8;
+  if (r.bottom + ph + 16 > window.innerHeight && r.top - ph - 8 > 0) top = r.top + window.scrollY - ph - 8;
+  pop.style.left = left + 'px'; pop.style.top = top + 'px';
+  const x = pop.querySelector('[data-close]'); if (x) x.focus({ preventScroll: true });
+}
+document.addEventListener('click', e => {
+  const m = e.target.closest('mark.ann');
+  if (m && !document.body.classList.contains('no-ann')) { e.preventDefault(); openPop(m, m.dataset.ann); return; }
+  if (e.target.closest('[data-close]')) { closePop(); return; }
+  const ed = e.target.closest('[data-edit]'); if (ed) { closePop(); const a = findAnn(ed.dataset.edit); if (a) openEditor(a); return; }
+  const dl = e.target.closest('[data-del]'); if (dl) { closePop(); const a = findAnn(dl.dataset.del); if (a) openDelete(a); return; }
+  const add = e.target.closest('[data-addnote]'); if (add) { openEditor({ no: +add.dataset.addnote, type: 'umum', field: null, scope: canWrite ? 'guru' : 'saya' }); return; }
+  const li = e.target.closest('[data-li]');
+  if (li && !e.target.closest('button')) { const mk = document.querySelector('mark.ann[data-ann="' + CSS.escape(li.dataset.li) + '"]'); if (mk) { mk.scrollIntoView({ block: 'center' }); mk.classList.add('flash'); setTimeout(() => mk.classList.remove('flash'), 1600); } return; }
+  if (!pop.hidden && !e.target.closest('#pop')) closePop();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closePop(); closeModal(); }
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('mark.ann')) { e.preventDefault(); openPop(e.target, e.target.dataset.ann); }
+});
+
+/* Selection → teacher toolbar */
+const selbar = $('#selbar');
+let pending = null, selT;
+function countIn(hay, needle) { let c = 0, i = hay.indexOf(needle); while (i >= 0) { c++; i = hay.indexOf(needle, i + needle.length); } return c; }
+let penOn = false, penTool = 'y';
+const TOOLS = [['y', 'Serlahan warna 1', 'dot', 'var(--hl-y)'], ['g', 'Serlahan warna 2', 'dot', 'var(--hl-g)'], ['p', 'Serlahan warna 3', 'dot', 'var(--hl-p)'], ['garis', 'Garis', 'ul'], ['nota', 'Nota'], ['pindaan', 'Pindaan']];
+function drawSelbar(hint) {
+  if (!penOn) { selbar.hidden = true; return; }
+  const q = pending ? '“' + esc(pending.quote) + '”' : esc(hint || 'Pilih teks, kemudian pilih alat.');
+  selbar.innerHTML = '<span class="q" dir="auto">' + q + '</span><span class="grp">' + TOOLS.map(([k, n, cls, bg]) =>
+    '<button type="button" class="tool ' + (cls || '') + '" data-sel="' + k + '" title="' + n + '" aria-label="' + n + '"' + (bg ? ' style="background:' + bg + '"' : '') + '>' + (cls === 'dot' ? '' : n) + '</button>').join('') +
+    '</span><button type="button" class="pri" data-sel="done">Selesai</button>';
+  selbar.hidden = false;
+}
+function hideSelbar() { pending = null; drawSelbar(); }
+function readSelection() {
+  if (!penOn || !$('#modalBg').hidden) return;
+  const sel = window.getSelection();
+  if (!sel || !sel.rangeCount || sel.isCollapsed) { pending = null; drawSelbar(); return; }
+  const r = sel.getRangeAt(0);
+  const node = r.commonAncestorContainer.nodeType === 1 ? r.commonAncestorContainer : r.commonAncestorContainer.parentElement;
+  const box = node && node.closest('.ms-text, .ar-text');
+  const art = box && box.closest('.hadith');
+  if (!art) { pending = null; drawSelbar(); return; }
+  const h = HMAP.get(+art.dataset.no);
+  const field = box.classList.contains('ar-text') ? 'ar' : 'ms';
+  const quote = sel.toString().replace(/[﴿﴾]/g, '').replace(/\s+/g, ' ').trim();
+  pending = null;
+  if (!quote) { drawSelbar(); return; }
+  if (field === 'ar' && !barisOn) { drawSelbar('Hidupkan baris (ikon mata) untuk menanda teks Arab.'); return; }
+  if (!h[field].includes(quote)) { drawSelbar('Pilih teks dalam satu perenggan sahaja, tanpa melintasi tanda lain.'); return; }
+  const pre = document.createRange(); pre.setStart(box, 0); pre.setEnd(r.startContainer, r.startOffset);
+  const occ = Math.min(countIn(pre.toString().replace(/[﴿﴾]/g, ''), quote), countIn(h[field], quote) - 1);
+  pending = { no: h.no, field, quote, occ: Math.max(0, occ) };
+  drawSelbar();
+}
+function setPen(on) {
+  penOn = on; $('#btnPen').setAttribute('aria-pressed', on); document.body.classList.toggle('pen', on);
+  pending = null; drawSelbar();
+  if (on) { closePanels(); toast('Pen aktif: pilih teks, kemudian pilih alat.'); }
+}
+document.addEventListener('selectionchange', () => { clearTimeout(selT); selT = setTimeout(readSelection, 250); });
+selbar.addEventListener('mousedown', e => e.preventDefault());
+selbar.addEventListener('click', e => {
+  const b = e.target.closest('[data-sel]'); if (!b) return;
+  const kind = b.dataset.sel, p = pending;
+  if (kind === 'done') { setPen(false); try { window.getSelection().removeAllRanges(); } catch (err) {} return; }
+  if (!p) { toast('Pilih teks dahulu.'); return; }
+  if (kind === 'pindaan' && p.field !== 'ms') { toast('Pindaan hanya untuk terjemahan Melayu.'); return; }
+  try { window.getSelection().removeAllRanges(); } catch (err) {}
+  pending = null; drawSelbar();
+  if (kind === 'garis') { quickMark(p, 'garis', 'p'); return; }
+  if (kind === 'y' || kind === 'g' || kind === 'p') { quickMark(p, 'serlah', kind); return; }
+  openEditor(Object.assign({}, p, { type: kind, color: 'y', alt: kind === 'pindaan' ? p.quote : '', scope: 'saya' }));
+});
+
+async function quickMark(p, type, color) {
+  const h = HMAP.get(p.no), st = findOcc(h[p.field] || '', p.quote, p.occ || 0), en = st + p.quote.length;
+  if ((h._anns || prepAnns(h)).some(x => x.field === p.field && x.pos >= 0 && st < x.pos + x.quote.length && x.pos < en)) { toast('Bahagian ini sudah ditanda. Ketik tanda itu untuk mengubahnya.'); return; }
+  const id = newId(), body = { no: p.no, type, field: p.field, quote: p.quote, occ: p.occ || 0, text: '', alt: '', color, at: Date.now() };
+  try {
+    const where = await savePersonal(id, body, false);
+    if (where === 'local') render();
+    toast(type === 'garis' ? 'Digaris.' : 'Diserlah.');
+  } catch (err) { writeFailed(err); }
+}
+
+/* Editor modal */
+const modalBg = $('#modalBg'), modal = $('#modal');
+let editing = null;
+function closeModal() { modalBg.hidden = true; modal.innerHTML = ''; editing = null; }
+function openEditor(a) {
+  editing = a;
+  const isNew = !a.id, type = a.type;
+  let html = '<h2>' + (isNew ? 'Tambah ' : 'Sunting ') + esc((KIND[type] || 'Nota').toLowerCase()) + ' · Hadis ' + a.no + '</h2>';
+  if (a.field) html += '<div class="quote" lang="' + (a.field === 'ar' ? 'ar' : 'ms') + '">' + esc(a.quote) + '</div>';
+  if (isNew && canWrite) html += '<div class="scope" role="radiogroup" aria-label="Siapa boleh melihat"><label><input type="radio" name="scope" id="sc-guru" value="guru"' + (a.scope !== 'saya' ? ' checked' : '') + '> Untuk semua pelajar</label><label><input type="radio" name="scope" id="sc-saya" value="saya"' + (a.scope === 'saya' ? ' checked' : '') + '> Saya sahaja</label></div>';
+  if (type === 'serlah' || type === 'garis') {
+    html += '<label>Gaya<span class="scope" role="radiogroup"><label><input type="radio" name="style" value="serlah"' + (type === 'serlah' ? ' checked' : '') + '> Serlah</label><label><input type="radio" name="style" value="garis"' + (type === 'garis' ? ' checked' : '') + '> Garis bawah</label></span></label>';
+    html += '<label>Warna<span class="swatches">' + [['y', 'Warna 1', '--hl-y'], ['g', 'Warna 2', '--hl-g'], ['p', 'Warna 3', '--hl-p']].map(([c, n, v]) =>
+      '<label title="' + n + '"><input type="radio" name="color" id="col-' + c + '" value="' + c + '"' + ((a.color || 'y') === c ? ' checked' : '') + '><span style="background:var(' + (type === 'garis' ? '--ul-' + c : v) + ')"></span><span hidden>' + n + '</span></label>').join('') + '</span></label>';
+  }
+  if (type === 'pindaan') html += '<label for="f-alt">Terjemahan pilihan anda<textarea id="f-alt" name="alt" required>' + esc(a.alt || '') + '</textarea></label>';
+  html += '<label for="f-text">' + ((type === 'serlah' || type === 'garis') ? 'Nota (pilihan)' : type === 'pindaan' ? 'Sebab atau penjelasan (pilihan)' : 'Nota') + '<textarea id="f-text" name="text"' + ((type === 'nota' || type === 'umum') ? ' required' : '') + '>' + esc(a.text || '') + '</textarea></label>';
+  html += '<div class="btns"><button type="button" data-m="cancel">Batal</button><button type="submit" class="pri">Simpan</button></div>';
+  modal.innerHTML = html; modalBg.hidden = false;
+  const f = modal.querySelector('textarea'); if (f) f.focus();
+}
+function openDelete(a) {
+  editing = a;
+  modal.innerHTML = '<h2>Padam ' + esc((KIND[a.type] || 'nota').toLowerCase()) + '?</h2><p style="margin:0;color:var(--ink-soft)">Ia akan dibuang daripada nota anda. Teks hadis tidak berubah.</p>' +
+    (a.field ? '<div class="quote" lang="' + (a.field === 'ar' ? 'ar' : 'ms') + '">' + esc(a.quote) + '</div>' : '') +
+    '<div class="btns"><button type="button" data-m="cancel">Batal</button><button type="button" class="pri" data-m="del" style="background:#b3261e;border-color:#b3261e">Padam</button></div>';
+  modalBg.hidden = false;
+}
+modalBg.addEventListener('click', e => { if (e.target.closest('[data-m="imp"]')) { doImport(); return; } if (e.target === modalBg || e.target.closest('[data-m="cancel"]')) closeModal(); else if (e.target.closest('[data-m="del"]')) doDelete(); });
+function newId() { return 'n' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+function putLocal(id, body) {
+  MINE_LOCAL.forEach(l => { const i = l.findIndex(x => x.id === id); if (i >= 0) l.splice(i, 1); });
+  if (body) { if (!MINE_LOCAL.has(body.no)) MINE_LOCAL.set(body.no, []); MINE_LOCAL.get(body.no).push(Object.assign({ id }, body, { local: true })); }
+  saveLocal();
+}
+async function savePersonal(id, body, wasLocal) {
+  if (personalMode === 'db' && db && uid && !wasLocal) {
+    try { await db.collection('data/users/' + uid).doc(id).set(body); return 'db'; }
+    catch (err) { if (!(err && (err.code === 'invalid_argument' || err.code === 'not_granted'))) throw err; personalMode = 'local'; }
+  }
+  putLocal(id, body); return 'local';
+}
+modal.addEventListener('submit', async e => {
+  e.preventDefault(); if (!editing || editing.importing) return;
+  const fd = new FormData(modal);
+  const text = String(fd.get('text') || '').trim(), alt = String(fd.get('alt') || '').trim();
+  if ((editing.type === 'nota' || editing.type === 'umum') && !text) { toast('Tulis nota dahulu.'); return; }
+  if (editing.type === 'pindaan' && !alt) { toast('Tulis cadangan terjemahan dahulu.'); return; }
+  const scope = editing.id ? editing.scope : (canWrite ? String(fd.get('scope') || 'guru') : 'saya');
+  const mk = editing.type === 'serlah' || editing.type === 'garis';
+  const type = mk ? String(fd.get('style') || editing.type) : editing.type;
+  const body = { no: editing.no, type, field: editing.field || null, quote: editing.quote || '', occ: editing.occ || 0,
+    text, alt: editing.type === 'pindaan' ? alt : '', color: mk ? String(fd.get('color') || 'y') : '', at: editing.at || Date.now() };
+  const btn = modal.querySelector('[type=submit]'); btn.disabled = true;
+  try {
+    if (scope === 'guru') {
+      if (!db || !canWrite) throw { code: 'not_granted' };
+      if (editing.id) await db.doc('anotasi/' + editing.id).set(body); else await db.collection('anotasi').add(body);
+      closeModal(); toast('Disimpan. Semua pelajar akan melihatnya.');
+    } else {
+      const where = await savePersonal(editing.id || newId(), body, !!editing.local);
+      closeModal(); render(); toast(where === 'db' ? 'Disimpan dalam nota anda.' : 'Disimpan dalam peranti ini.');
+    }
+  } catch (err) { btn.disabled = false; writeFailed(err); }
+});
+async function doDelete() {
+  const a = editing; if (!a || !a.id) return;
+  try {
+    if (a.scope === 'guru') { if (!db) return; await db.doc('anotasi/' + a.id).delete(); }
+    else if (a.local) { putLocal(a.id, null); render(); }
+    else { await db.collection('data/users/' + uid).doc(a.id).delete(); }
+    closeModal(); toast('Dipadam.');
+  } catch (err) { writeFailed(err); }
+}
+function writeFailed(err) {
+  const code = err && err.code;
+  if (code === 'invalid_argument' || code === 'not_granted') { canWrite = false; document.body.classList.remove('teacher'); closeModal(); toast('Nota tidak dapat disimpan dalam akaun ini. Cuba muat semula halaman.'); render(); }
+  else if (code === 'quota_exceeded') toast('Ruang simpanan nota sudah penuh. Padam beberapa nota lama.');
+  else toast('Tidak dapat menyimpan. Cuba lagi sebentar.');
+}
+
+/* Reader toggles */
+function applyNab() { $('#nabToggle').setAttribute('aria-pressed', nabOn); }
+$('#nabToggle').addEventListener('click', () => { nabOn = !nabOn; store.set('rs-nab', nabOn); applyNab(); render(); });
+function applyAnnView() {
+  document.body.classList.toggle('no-ann', !annOn);
+  $('#annToggle').setAttribute('aria-pressed', annOn);
+  $('#altToggle').setAttribute('aria-pressed', altInline);
+}
+$('#annToggle').addEventListener('click', () => { annOn = !annOn; store.set('rs-ann', annOn); applyAnnView(); closePop(); });
+$('#altToggle').addEventListener('click', () => { altInline = !altInline; store.set('rs-alt', altInline); applyAnnView(); render(); });
+
+function myNotes() {
+  const out = [];
+  for (const m of [MINE_DB, MINE_LOCAL]) for (const [no, l] of m) { const h = HMAP.get(no); if (!h) continue; l.forEach(a => out.push(Object.assign({ pos: a.field ? findOcc(h[a.field] || '', a.quote || '', a.occ || 0) : 1e9 }, a))); }
+  return out.sort((a, b) => a.no - b.no || (a.field === b.field ? 0 : a.field === 'ar' ? -1 : 1) || a.pos - b.pos);
+}
+function currentNo() {
+  const top = $('.bar').getBoundingClientRect().bottom + 8;
+  for (const el of document.querySelectorAll('.hadith')) if (el.getBoundingClientRect().bottom > top) return +el.dataset.no;
+  return DATA.hadith[0].no;
+}
+function notesHtml() {
+  const list = myNotes(), cur = currentNo();
+  const sw = a => a.type === 'serlah' ? '<span class="chip" style="background:var(--hl-' + esc(a.color || 'y') + ')"></span>' : a.type === 'garis' ? '<span class="chip" style="background:var(--ul-' + esc(a.color || 'p') + ')"></span>' : '';
+  return '<button type="button" class="addn" data-addnote="' + cur + '">＋ Tambah nota pada Hadis ' + cur + '</button>' +
+    '<div class="prow"><span class="plbl">Nota saya · ' + list.length + '</span>' +
+    (list.length ? '<ol class="nlist">' + list.map(a => '<li><button type="button" data-goto="' + esc(a.id) + '" data-no="' + a.no + '"><span class="meta">' + sw(a) + 'Hadis ' + a.no + ' · ' + esc(KIND[a.type] || 'Nota') + '</span>' +
+      (a.quote ? '<span class="qt"' + (a.field === 'ar' ? ' lang="ar" dir="rtl"' : '') + '>' + esc(a.quote) + '</span>' : '') +
+      (a.type === 'pindaan' && a.alt ? '<span class="tx">→ ' + esc(a.alt) + '</span>' : '') + (a.text ? '<span class="tx">' + esc(a.text) + '</span>' : '') + '</button></li>').join('') + '</ol>'
+      : '<p style="margin:0;color:var(--ink-soft)">Belum ada nota. Tekan ikon pen dan pilih teks untuk mula menanda.</p>') + '</div>';
+}
+function updateToggles() {
+  const n = myNotes().length, b = $('#noteCount');
+  b.hidden = !n; b.textContent = n > 99 ? '99+' : n;
+  if (!$('#pNotes').hidden) $('#pNotes').innerHTML = notesHtml();
+}
+/* Toolbar: panels, search, index */
+function closePanels(except) {
+  for (const [p, btn] of [['#pView', '#btnView'], ['#pNotes', '#btnNotes'], ['#pSet', '#btnSet']]) if (p !== except) { $(p).hidden = true; $(btn).setAttribute('aria-expanded', 'false'); }
+}
+function togglePanel(p, btn) {
+  const open = $(p).hidden; closePanels(p); closePop();
+  if (p === '#pNotes' && open) $(p).innerHTML = notesHtml();
+  $(p).hidden = !open; $(btn).setAttribute('aria-expanded', open);
+}
+$('#btnView').addEventListener('click', () => togglePanel('#pView', '#btnView'));
+$('#btnNotes').addEventListener('click', () => togglePanel('#pNotes', '#btnNotes'));
+$('#btnPen').addEventListener('click', () => setPen(!penOn));
+/* Notes backup */
+function exportNotes() {
+  const notes = myNotes().map(a => ({ id: a.id, no: a.no, type: a.type, field: a.field || null, quote: a.quote || '', occ: a.occ || 0, text: a.text || '', alt: a.alt || '', color: a.color || '', at: a.at || 0 }));
+  if (!notes.length) { toast('Belum ada nota untuk dieksport.'); return; }
+  const json = JSON.stringify({ app: 'riyadus-salihin-melayu', jenis: 'nota', dieksport: new Date().toISOString(), nota: notes });
+  const name = 'nota-riyadus-salihin-' + new Date().toISOString().slice(0, 10) + '.json';
+  if (window.RSApp && RSApp.shareFile) { RSApp.shareFile(name, json); return; }
+  if (window.claude && window.claude.use) {
+    window.claude.use('downloads').then(dl => {
+      if (!dl) return blobSave(name, json, notes.length);
+      dl.save({ filename: name, data: json }).then(() => toast(notes.length + ' nota dieksport.'), err => { if (err && err.code !== 'declined') toast('Tidak dapat menyimpan fail di sini.'); });
+    }, () => blobSave(name, json, notes.length));
+    return;
+  }
+  blobSave(name, json, notes.length);
+}
+function blobSave(name, json, count) {
+  try {
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([json], { type: 'application/json' })); a.download = name;
+    document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    toast(count + ' nota dieksport.');
+  } catch (err) { fallbackCopy(json, () => toast('Nota disalin ke papan klip.')); }
+}
+function openImport() {
+  editing = { importing: true };
+  modal.innerHTML = '<h2>Import nota</h2><p style="margin:0;color:var(--ink-soft);font-size:14px">Pilih fail .json yang dieksport, atau tampal kandungannya di bawah. Nota yang sudah ada tidak akan digandakan.</p>' +
+    '<input type="file" id="impFile" accept=".json,application/json,text/plain">' +
+    '<label for="impText">Atau tampal di sini<textarea id="impText" name="imp" rows="5"></textarea></label>' +
+    '<div class="btns"><button type="button" data-m="cancel">Batal</button><button type="button" class="pri" data-m="imp">Import</button></div>';
+  modalBg.hidden = false;
+  $('#impFile').addEventListener('change', e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { $('#impText').value = r.result; }; r.readAsText(f); });
+}
+async function doImport() {
+  let data; try { data = JSON.parse($('#impText').value); } catch (err) { toast('Kandungan tidak sah.'); return; }
+  const list = Array.isArray(data) ? data : (data.nota || []);
+  const have = new Set(myNotes().map(a => a.id));
+  let n = 0;
+  for (const a of list) {
+    if (!a || typeof a.no !== 'number' || !HMAP.has(a.no) || !KIND[a.type]) continue;
+    const id = a.id && /^[\w-]{1,64}$/.test(a.id) ? a.id : newId(); if (have.has(id)) continue;
+    const body = { no: a.no, type: a.type, field: a.field === 'ar' || a.field === 'ms' ? a.field : null, quote: String(a.quote || ''), occ: +a.occ || 0, text: String(a.text || ''), alt: String(a.alt || ''), color: String(a.color || ''), at: +a.at || Date.now() };
+    try { await savePersonal(id, body, false); n++; } catch (err) { writeFailed(err); break; }
+  }
+  closeModal(); render(); toast(n ? n + ' nota diimport.' : 'Tiada nota baharu untuk diimport.');
+}
+/* Android back button: close the top layer; return false when nothing was open */
+window.rsBack = function () {
+  if (!$('#modalBg').hidden) { closeModal(); return true; }
+  if (!pop.hidden) { closePop(); return true; }
+  if (!$('#sheet').hidden) { closeSheet(); return true; }
+  if (['#pView', '#pNotes', '#pSet'].some(p => !$(p).hidden)) { closePanels(); return true; }
+  if (!$('#searchRow').hidden) { setSearch(false); return true; }
+  if (penOn) { setPen(false); return true; }
+  return false;
+};
+/* Settings: theme and colours (saved on this device) */
+const PAL = {
+  hl: [['kuning', '#fbe7a6', '#5a4b1c'], ['hijau', '#cfe9d9', '#1f4a39'], ['merah jambu', '#f6d3dc', '#5a2a37'], ['biru', '#d3e4f7', '#1e3a57'], ['ungu', '#e4d8f3', '#3e2d57'], ['oren', '#fbdcc0', '#5a3a1c'], ['pudina', '#c9efe8', '#1c4a45'], ['kelabu', '#e3e3de', '#3a3d3b']],
+  ul: [['merah', '#c0392b', '#f07a6a'], ['biru', '#1f5fa8', '#6aa8f0'], ['hijau', '#1f7a55', '#5fc596'], ['emas', '#b8860b', '#e0b44a'], ['ungu', '#6b3fa0', '#b48ef0'], ['hitam', '#1d2422', '#e4ebe7']],
+  accent: [['Jed', '#0e6b58', '#e3efe9', '#5fc0a6', '#1d3029'], ['Biru', '#1d5fa0', '#e1ecf7', '#7ab3ea', '#1a2b3d'], ['Ungu', '#5b3d99', '#ebe5f5', '#b39ae8', '#2a2240'], ['Merah hati', '#8c2a3c', '#f5e3e6', '#e8899a', '#3a1f25'], ['Coklat', '#7a4e1d', '#f3e8da', '#d9a66b', '#33261a']],
+  matn: [['Perang', '#8a3b12', '#f6e6da', '#f0a479', '#3d2a1f'], ['Biru', '#1a4f8a', '#e0eaf6', '#8cbcf0', '#1c2c40'], ['Hijau', '#1d6b3a', '#dff0e4', '#7fd39c', '#1b3424'], ['Ungu', '#5e2d8a', '#ece2f5', '#c6a2ef', '#2c2140'], ['Merah', '#a4161a', '#f8e0e0', '#f28b8b', '#3d1c1c']]
+};
+const THEME_DEF = { mode: 'auto', accent: 0, matn: 0, hl: [0, 1, 2], ul: 0 };
+let theme = Object.assign({}, THEME_DEF, store.get('rs-theme', {}));
+if (!Array.isArray(theme.hl) || theme.hl.length !== 3) theme.hl = THEME_DEF.hl.slice();
+function applyTheme() {
+  const root = document.documentElement;
+  if (theme.mode === 'auto') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', theme.mode);
+  const a = PAL.accent[theme.accent] || PAL.accent[0], m = PAL.matn[theme.matn] || PAL.matn[0], u = PAL.ul[theme.ul] || PAL.ul[0];
+  const hl = theme.hl.map(i => PAL.hl[i] || PAL.hl[0]);
+  const L = '--jade:' + a[1] + ';--jade-tint:' + a[2] + ';--matn:' + m[1] + ';--matn-tint:' + m[2] + ';--ul-p:' + u[1] + ';--hl-y:' + hl[0][1] + ';--hl-g:' + hl[1][1] + ';--hl-p:' + hl[2][1] + ';';
+  const D = '--jade:' + a[3] + ';--jade-tint:' + a[4] + ';--matn:' + m[3] + ';--matn-tint:' + m[4] + ';--ul-p:' + u[2] + ';--hl-y:' + hl[0][2] + ';--hl-g:' + hl[1][2] + ';--hl-p:' + hl[2][2] + ';';
+  $('#userTheme').textContent = ':root{' + L + '}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]):not([data-theme="sepia"]){' + D + '}}:root[data-theme="dark"]{' + D + '}';
+  const mc = document.querySelector('meta[name="theme-color"]'); if (mc) mc.content = getComputedStyle(document.body).backgroundColor;
+}
+function setHtml() {
+  const opt = (k, v, label, dot) => '<button type="button" data-set="' + k + '" data-v="' + v + '" aria-pressed="' + (String(theme[k]) === String(v)) + '">' + (dot ? '<span class="dotc" style="background:' + dot + '"></span>' : '') + label + '</button>';
+  const dk = getComputedStyle(document.documentElement).colorScheme === 'dark';
+  const sw = (k, list, cur, idx) => list.map(([n, l, d], i) => '<button type="button" data-set="' + k + '" data-v="' + i + '"' + (idx !== undefined ? ' data-i="' + idx + '"' : '') + ' title="' + n + '" aria-label="' + n + '" aria-pressed="' + (cur === i) + '" style="background:' + (dk ? d : l) + '"></button>').join('');
+  return '<div class="set-row"><span class="plbl">Tema</span><div class="opts">' + opt('mode', 'auto', 'Ikut peranti') + opt('mode', 'light', 'Cerah', '#ffffff') + opt('mode', 'sepia', 'Sepia', '#f3ead5') + opt('mode', 'dark', 'Gelap', '#18201d') + '</div></div>' +
+    '<div class="set-row"><span class="plbl">Warna utama</span><div class="opts">' + PAL.accent.map((a, i) => opt('accent', i, a[0], a[1])).join('') + '</div></div>' +
+    '<div class="set-row"><span class="plbl">Warna sabda Nabi ﷺ</span><div class="opts">' + PAL.matn.map((a, i) => opt('matn', i, a[0], a[1])).join('') + '</div></div>' +
+    '<div class="set-row"><span class="plbl">Warna serlahan</span>' + [0, 1, 2].map(k => '<div class="cswatch"><span class="lbl2">Warna ' + (k + 1) + '</span>' + sw('hl', PAL.hl, theme.hl[k], k) + '</div>').join('') + '</div>' +
+    '<div class="set-row"><span class="plbl">Warna garis bawah</span><div class="cswatch">' + sw('ul', PAL.ul, theme.ul) + '</div></div>' +
+    '<div class="set-row"><span class="plbl">Contoh</span><div class="preview"><span class="nb-q">sabda Nabi ﷺ</span> · <span class="nb-f">perbuatan</span> · <mark class="ann t-serlah c-y bare">warna 1</mark> <mark class="ann t-serlah c-g bare">warna 2</mark> <mark class="ann t-serlah c-p bare">warna 3</mark> · <mark class="ann t-garis c-p bare">garis</mark></div></div>' +
+    '<button type="button" class="linkbtn" data-set="reset">Tetapkan semula warna asal</button>' +
+    '<div class="set-row"><span class="plbl">Sandaran nota</span><div class="opts"><button type="button" data-set="export">Eksport nota</button><button type="button" data-set="import">Import nota</button></div>' +
+    '<span style="font-size:12.5px;color:var(--ink-soft)">Simpan salinan nota anda, atau pindahkan nota antara laman web dan aplikasi.</span></div>' +
+    '<div style="font-size:12px;color:var(--ink-soft)">Versi kandungan ' + esc(String(window.RS_VERSION || '-')) + (window.RSApp ? ' · Aplikasi ' + esc(RSApp.appVersion()) + ' · <button type="button" class="linkbtn" data-set="update">Semak kemas kini</button>' : '') + '</div>';
+}
+$('#btnSet').addEventListener('click', () => { if ($('#pSet').hidden) $('#pSet').innerHTML = setHtml(); togglePanel('#pSet', '#btnSet'); });
+$('#pSet').addEventListener('click', e => {
+  e.stopPropagation();
+  const b = e.target.closest('[data-set]'); if (!b) return;
+  const k = b.dataset.set, v = b.dataset.v;
+  if (k === 'export') { exportNotes(); return; }
+  if (k === 'update') { if (window.RSApp) RSApp.checkUpdate(); return; }
+  if (k === 'import') { closePanels(); openImport(); return; }
+  if (k === 'reset') theme = Object.assign({}, THEME_DEF, { mode: theme.mode, hl: THEME_DEF.hl.slice() });
+  else if (k === 'mode') theme.mode = v;
+  else if (k === 'hl') theme.hl[+b.dataset.i] = +v;
+  else theme[k] = +v;
+  store.set('rs-theme', theme); applyTheme();
+  const st = $('#pSet').scrollTop; $('#pSet').innerHTML = setHtml(); $('#pSet').scrollTop = st;
+});
+document.addEventListener('click', e => { if (!e.target.closest('.panel, .tools, .modal-bg')) closePanels(); });
+$('#pNotes').addEventListener('click', e => {
+  const add = e.target.closest('[data-addnote]');
+  if (add) { e.stopPropagation(); closePanels(); openEditor({ no: +add.dataset.addnote, type: 'umum', field: null, scope: 'saya' }); return; }
+  const g = e.target.closest('[data-goto]'); if (!g) return;
+  closePanels();
+  if ($('#q').value || onlyMarks) { $('#q').value = ''; onlyMarks = false; $('#onlyMarks').setAttribute('aria-pressed', false); render(); }
+  const mk = document.querySelector('mark.ann[data-ann="' + CSS.escape(g.dataset.goto) + '"]');
+  const target = mk || document.getElementById('h' + g.dataset.no);
+  if (target) { target.scrollIntoView({ block: mk ? 'center' : 'start' }); if (mk) { mk.classList.add('flash'); setTimeout(() => mk.classList.remove('flash'), 1600); } }
+});
+function setSearch(open) {
+  $('#searchRow').hidden = !open; $('#btnSearch').setAttribute('aria-expanded', open);
+  if (open) { closePanels(); $('#q').focus(); } else if ($('#q').value) { $('#q').value = ''; render(); }
+}
+$('#btnSearch').addEventListener('click', () => setSearch($('#searchRow').hidden));
+$('#qClose').addEventListener('click', () => setSearch(false));
+let barisOn = store.get('rs-baris', true);
+const HARAKAT = /[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]/g;
+function applyBaris() { $('#barisToggle').setAttribute('aria-pressed', barisOn); }
+$('#barisToggle').addEventListener('click', () => { barisOn = !barisOn; store.set('rs-baris', barisOn); applyBaris(); render(); });
+let idxHidden = store.get('rs-noidx', false);
+const wide = () => window.matchMedia('(min-width: 861px)').matches;
+function applyIdx() { document.body.classList.toggle('noindex', idxHidden); }
+$('#openIndex').addEventListener('click', () => { closePanels(); if (wide()) { idxHidden = !idxHidden; store.set('rs-noidx', idxHidden); applyIdx(); } else openSheet(); });
+/* Connect to shared storage */
+(async () => {
+  if (!window.claude || !window.claude.use) return;
+  let u = null;
+  try { [u, db] = await Promise.all([window.claude.use('user'), window.claude.use('db')]); } catch (err) { db = null; }
+  if (!db) return;
+  canWrite = false; // personal notes only
+  uid = u ? await u.id() : null;
+  if (uid) {
+    personalMode = 'db';
+    db.collection('data/users/' + uid).onSnapshot(snap => {
+      const next = new Map();
+      snap.docs.forEach(d => { const a = Object.assign({ id: d.id }, d.data()); if (typeof a.no !== 'number') return; if (!next.has(a.no)) next.set(a.no, []); next.get(a.no).push(a); });
+      MINE_DB = next; render();
+    }, err => { console.warn('nota saya', err && err.code); });
+  }
+})();
+
+const _render = render; render = function () {
+  _render();
+  if (!barisOn) document.querySelectorAll('#list .ar-text').forEach(el => { el.innerHTML = el.innerHTML.replace(HARAKAT, ''); });
+  observe(); updateToggles();
+};
+applyTheme(); applyView(); applyAnnView(); applyNab(); applyBaris(); applyIdx(); render();
+</script>
