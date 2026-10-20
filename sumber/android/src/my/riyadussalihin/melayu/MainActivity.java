@@ -101,6 +101,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (apkReady && !canSilent() && canInstall() && prefs().getBoolean("askedPerm", false)) { prefs().edit().putBoolean("askedPerm", false).apply(); commitInstall(); }
         if (lastCheck > 0 && System.currentTimeMillis() - lastCheck > RECHECK_MS) checkForUpdate(false);
     }
 
@@ -158,7 +159,7 @@ public class MainActivity extends Activity {
                 final boolean didUpdate = updated;
                 final int apkVer = j.optInt("apk_version", 0);
                 final String apkUrl = j.optString("apk", "");
-                final String apkNote = j.optString("apk_nota", "");
+                final String apkSha = j.optString("apk_sha256", "");
                 runOnUiThread(new Runnable() { public void run() {
                     if (didUpdate) {
                         loadPage();
@@ -166,7 +167,7 @@ public class MainActivity extends Activity {
                     } else if (manual) {
                         Toast.makeText(MainActivity.this, "Sudah versi terkini", Toast.LENGTH_SHORT).show();
                     }
-                    if (apkVer > APP_VERSION_CODE && !apkUrl.isEmpty() && prefs().getInt("skipApk", 0) != apkVer) askApkUpdate(apkVer, apkUrl, apkNote);
+                    if (apkVer > APP_VERSION_CODE && !apkUrl.isEmpty()) fetchApk(apkVer, apkUrl, apkSha);
                 }});
             } catch (final Exception e) {
                 if (manual) runOnUiThread(new Runnable() { public void run() {
@@ -176,15 +177,85 @@ public class MainActivity extends Activity {
         }}).start();
     }
 
-    void askApkUpdate(final int ver, final String url, String note) {
+    /* ---------- in-app APK update (PackageInstaller) ---------- */
+
+    File apkFile() { return new File(getCacheDir(), "update.apk"); }
+    boolean apkReady = false;
+
+    /** Download the new APK in the background, then install: quietly when Android allows, otherwise with one confirmation. */
+    void fetchApk(final int ver, final String url, final String sha) {
+        if (prefs().getInt("apkReady", 0) == ver && apkFile().exists()) { apkReady = true; installReady(ver); return; }
+        new Thread(new Runnable() { public void run() {
+            try {
+                byte[] apk = get(url + "?v=" + ver, 120000);
+                if (!sha.isEmpty() && !sha.equalsIgnoreCase(sha256(apk))) throw new Exception("checksum");
+                OutputStream o = new FileOutputStream(apkFile()); o.write(apk); o.close();
+                prefs().edit().putInt("apkReady", ver).apply();
+                runOnUiThread(new Runnable() { public void run() { apkReady = true; installReady(ver); } });
+            } catch (Exception ignored) { }
+        }}).start();
+    }
+
+    boolean canSilent() {
+        if (android.os.Build.VERSION.SDK_INT < 31) return false;
+        try { return getPackageName().equals(getPackageManager().getInstallerPackageName(getPackageName())); }
+        catch (Exception e) { return false; }
+    }
+
+    boolean canInstall() {
+        if (android.os.Build.VERSION.SDK_INT < 26) return true;
+        try { return (Boolean) getPackageManager().getClass().getMethod("canRequestPackageInstalls").invoke(getPackageManager()); }
+        catch (Exception e) { return true; }
+    }
+
+    void installReady(int ver) {
+        if (canSilent()) return; // installed quietly when the app goes to the background (onStop)
         if (isFinishing()) return;
-        new AlertDialog.Builder(this)
-            .setTitle("Versi aplikasi baharu")
-            .setMessage((note.isEmpty() ? "" : note + "\n\n") + "Muat turun dan pasang versi baharu aplikasi? Nota anda kekal.")
-            .setPositiveButton("Muat turun", new android.content.DialogInterface.OnClickListener() { public void onClick(android.content.DialogInterface d, int x) { try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url))); } catch (Exception ignored) { } } })
-            .setNegativeButton("Nanti", null)
-            .setNeutralButton("Langkau versi ini", new android.content.DialogInterface.OnClickListener() { public void onClick(android.content.DialogInterface d, int x) { prefs().edit().putInt("skipApk", ver).apply(); } })
-            .show();
+        if (!canInstall()) {
+            new AlertDialog.Builder(this)
+                .setTitle("Kemas kini aplikasi")
+                .setMessage("Versi baharu aplikasi sudah dimuat turun. Sekali sahaja, benarkan aplikasi ini memasang kemas kini: tekan Benarkan, hidupkan pilihan itu, kemudian kembali ke sini.\n\nSelepas ini kemas kini akan dipasang secara automatik.")
+                .setPositiveButton("Benarkan", new android.content.DialogInterface.OnClickListener() { public void onClick(android.content.DialogInterface d, int x) {
+                    prefs().edit().putBoolean("askedPerm", true).apply();
+                    try { startActivity(new Intent("android.settings.MANAGE_UNKNOWN_APP_SOURCES", Uri.parse("package:" + getPackageName()))); } catch (Exception ignored) { }
+                } })
+                .setNegativeButton("Nanti", null)
+                .show();
+            return;
+        }
+        commitInstall();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (apkReady && canSilent()) commitInstall();
+    }
+
+    void commitInstall() {
+        if (!apkFile().exists()) return;
+        try {
+            android.content.pm.PackageInstaller pi = getPackageManager().getPackageInstaller();
+            android.content.pm.PackageInstaller.SessionParams sp = new android.content.pm.PackageInstaller.SessionParams(android.content.pm.PackageInstaller.SessionParams.MODE_FULL_INSTALL);
+            sp.setAppPackageName(getPackageName());
+            if (android.os.Build.VERSION.SDK_INT >= 31) {
+                try { sp.getClass().getMethod("setRequireUserAction", int.class).invoke(sp, 2 /* USER_ACTION_NOT_REQUIRED */); } catch (Exception ignored) { }
+            }
+            int id = pi.createSession(sp);
+            android.content.pm.PackageInstaller.Session ses = pi.openSession(id);
+            OutputStream out = ses.openWrite("update.apk", 0, apkFile().length());
+            InputStream in = new FileInputStream(apkFile());
+            byte[] buf = new byte[65536]; int n;
+            while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
+            in.close(); ses.fsync(out); out.close();
+            Intent cb = new Intent(this, InstallReceiver.class);
+            int flags = android.app.PendingIntent.FLAG_UPDATE_CURRENT | (android.os.Build.VERSION.SDK_INT >= 31 ? 0x02000000 /* FLAG_MUTABLE */ : 0);
+            ses.commit(android.app.PendingIntent.getBroadcast(this, id, cb, flags).getIntentSender());
+            ses.close();
+            apkReady = false;
+        } catch (Exception e) {
+            Toast.makeText(this, "Tidak dapat memasang kemas kini", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /* ---------- helpers ---------- */

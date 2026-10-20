@@ -8,6 +8,6 @@ open(f'{out}/app.html','wb').write(page); open(f'{out}/index.html','wb').write(p
 shutil.copy('/home/claude/app/riyadus-salihin.apk',f'{out}/riyadus-salihin.apk')
 shutil.copy('/home/claude/app/icon512.png',f'{out}/icon.png')
 json.dump({'version':ver,'page':'app.html','sha256':hashlib.sha256(page).hexdigest(),
-           'apk_version':apk_ver,'apk':base+'riyadus-salihin.apk','apk_nota':''},open(f'{out}/version.json','w'),indent=1)
+           'apk_version':apk_ver,'apk_sha256':hashlib.sha256(open('/home/claude/app/riyadus-salihin.apk','rb').read()).hexdigest(),'apk':base+'riyadus-salihin.apk','apk_nota':''},open(f'{out}/version.json','w'),indent=1)
 open(f'{out}/.nojekyll','w').write('')
 print('site ready',ver)
