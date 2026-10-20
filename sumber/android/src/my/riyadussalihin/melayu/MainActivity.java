@@ -81,7 +81,19 @@ public class MainActivity extends Activity {
                 return true;
             }
         });
-        setContentView(web);
+        final android.widget.FrameLayout root = new android.widget.FrameLayout(this);
+        root.addView(web, new android.widget.FrameLayout.LayoutParams(-1, -1));
+        setContentView(root);
+        // Android 15+ draws apps edge-to-edge: keep the page clear of the status and navigation bars (and the keyboard).
+        w.getDecorView().setBackgroundColor(Color.parseColor("#0e6b58"));
+        if (android.os.Build.VERSION.SDK_INT >= 35) {
+            root.setOnApplyWindowInsetsListener(new android.view.View.OnApplyWindowInsetsListener() {
+                public android.view.WindowInsets onApplyWindowInsets(android.view.View v, android.view.WindowInsets in) {
+                    v.setPadding(in.getSystemWindowInsetLeft(), in.getSystemWindowInsetTop(), in.getSystemWindowInsetRight(), in.getSystemWindowInsetBottom());
+                    return in;
+                }
+            });
+        }
         loadPage();
         checkForUpdate(false);
     }
