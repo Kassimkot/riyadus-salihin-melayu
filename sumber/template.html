@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<title>Riyadus Salihin Melayu</title>
+<title>Riyadhus Salihin Melayu</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
   --mark: #fbf0c9;
   --matn: #8a3b12; --matn-tint: #f6e6da;
   --ul-y: #b8860b; --ul-g: #1f7a55; --ul-p: #c0392b;
-  --hl-y: #fbe7a6; --hl-g: #cfe9d9; --hl-p: #f6d3dc; --shadow: 0 10px 30px rgb(20 30 25 / .18);
+  --hl-y: #fbe7a6; --hl-o: #fbd2ae; --hl-r: #f7c1bb; --hl-p: #f6d3dc; --hl-u: #e4d8f3; --hl-b: #cfe1f7; --hl-t: #c4e8ef; --hl-g: #cfe9d9; --hl-l: #e0efc2; --hl-k: #e3e3de; --shadow: 0 10px 30px rgb(20 30 25 / .18);
   --font-ar: "Amiri", "Scheherazade New", "Noto Naskh Arabic", "Traditional Arabic", serif;
   --font-body: "Gentium Book Plus", "Georgia", "Times New Roman", serif;
   --font-ui: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -28,14 +28,14 @@
   :root:not([data-theme="light"]):not([data-theme="sepia"]) {
     --paper: #121816; --sheet: #18201d; --ink: #e4ebe7; --ink-soft: #9aa8a2;
     --rule: #2a3531; --jade: #5fc0a6; --jade-tint: #1d3029; --gold: #d2b46a; --mark: #4a4120;
-    --matn: #f0a479; --matn-tint: #3d2a1f; --ul-y: #e0b44a; --ul-g: #5fc596; --ul-p: #f07a6a; --hl-y: #5a4b1c; --hl-g: #1f4a39; --hl-p: #5a2a37; --shadow: 0 10px 30px rgb(0 0 0 / .5);
+    --matn: #f0a479; --matn-tint: #3d2a1f; --ul-y: #e0b44a; --ul-g: #5fc596; --ul-p: #f07a6a; --hl-y: #5a4b1c; --hl-o: #5c3a1a; --hl-r: #5e2320; --hl-p: #5a2a37; --hl-u: #3e2d57; --hl-b: #1e3a57; --hl-t: #1a4550; --hl-g: #1f4a39; --hl-l: #3a4a1c; --hl-k: #3a3d3b; --shadow: 0 10px 30px rgb(0 0 0 / .5);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --paper: #121816; --sheet: #18201d; --ink: #e4ebe7; --ink-soft: #9aa8a2;
   --rule: #2a3531; --jade: #5fc0a6; --jade-tint: #1d3029; --gold: #d2b46a; --mark: #4a4120;
-  --matn: #f0a479; --matn-tint: #3d2a1f; --ul-y: #e0b44a; --ul-g: #5fc596; --ul-p: #f07a6a; --hl-y: #5a4b1c; --hl-g: #1f4a39; --hl-p: #5a2a37; --shadow: 0 10px 30px rgb(0 0 0 / .5);
+  --matn: #f0a479; --matn-tint: #3d2a1f; --ul-y: #e0b44a; --ul-g: #5fc596; --ul-p: #f07a6a; --hl-y: #5a4b1c; --hl-o: #5c3a1a; --hl-r: #5e2320; --hl-p: #5a2a37; --hl-u: #3e2d57; --hl-b: #1e3a57; --hl-t: #1a4550; --hl-g: #1f4a39; --hl-l: #3a4a1c; --hl-k: #3a3d3b; --shadow: 0 10px 30px rgb(0 0 0 / .5);
   color-scheme: dark;
 }
 :root[data-theme="sepia"] {
@@ -97,8 +97,8 @@ button { cursor: pointer; }
 .selbar .tool[aria-pressed="true"] { outline: 2px solid var(--paper); outline-offset: 2px; }
 body.noindex .wrap { grid-template-columns: minmax(0, 1fr); max-width: 820px; }
 body.noindex .wrap > .index { display: none; }
-body.pen #main { padding-bottom: 140px; }
-body.pen .toast { bottom: calc(130px + env(safe-area-inset-bottom, 0px)); }
+body.selon #main { padding-bottom: 160px; }
+body.selon .toast { bottom: calc(130px + env(safe-area-inset-bottom, 0px)); }
 .brand .ar { white-space: nowrap; }
 .search input::-webkit-search-cancel-button { display: none; }
 @media (max-width: 420px) { .brand .ar { font-size: 22px; } .tb { width: 38px; } }
@@ -188,7 +188,12 @@ mark { background: var(--mark); color: inherit; border-radius: 2px; padding: 0 1
 .legend .nb-q, .legend .nb-f { padding: 0 4px; }
 .ann { border-radius: 3px; padding: 0 1px; cursor: pointer; color: inherit; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 .ann::after { content: attr(data-n); font-family: var(--font-ui); font-size: .58em; font-weight: 600; vertical-align: super; line-height: 0; margin-inline-start: 2px; color: var(--gold); }
-.ann.t-serlah.c-y { background: var(--hl-y); } .ann.t-serlah.c-g { background: var(--hl-g); } .ann.t-serlah.c-p { background: var(--hl-p); }
+.ann.t-serlah.c-y { background: var(--hl-y); } .ann.t-serlah.c-o { background: var(--hl-o); } .ann.t-serlah.c-r { background: var(--hl-r); } .ann.t-serlah.c-p { background: var(--hl-p); } .ann.t-serlah.c-u { background: var(--hl-u); } .ann.t-serlah.c-b { background: var(--hl-b); } .ann.t-serlah.c-t { background: var(--hl-t); } .ann.t-serlah.c-g { background: var(--hl-g); } .ann.t-serlah.c-l { background: var(--hl-l); } .ann.t-serlah.c-k { background: var(--hl-k); }
+.ann.t-nombor { background: transparent; border-radius: 0; border-bottom: 1.5px dashed var(--jade); }
+.ann.t-nombor::before { content: attr(data-num); display: inline-block; min-width: 1.45em; height: 1.45em; padding: 0 .3em; border-radius: .75em; background: var(--jade); color: var(--sheet);
+  font: 600 .62em/1.45em var(--font-ui); text-align: center; vertical-align: .3em; margin-inline-end: .3em; }
+.ann.t-nombor::after { content: none; }
+body.no-ann .ann::before { display: none; }
 .ann.t-garis { background: transparent; border-radius: 0; text-decoration: underline 2.5px var(--ul-p); text-underline-offset: 4px; text-decoration-skip-ink: none; }
 .ann.t-garis.c-y { text-decoration-color: var(--ul-y); } .ann.t-garis.c-g { text-decoration-color: var(--ul-g); }
 .ar-text .ann.t-garis { text-underline-offset: 7px; }
@@ -276,16 +281,30 @@ body.no-ann .ann::after, body.no-ann .box.guru { display: none; }
 .linkbtn { border: 0; background: none; color: var(--jade); text-decoration: underline; padding: 0; font-size: 13px; justify-self: start; }
 @media (max-width: 420px) { .tools { gap: 0; } .tb { width: 34px; height: 38px; } .tb svg { width: 20px; height: 20px; } .brand .ar { font-size: 19px; } .bar { padding-left: 12px; padding-right: 8px; } }
 .brand { overflow: hidden; }
+.selbar { flex-direction: column; flex-wrap: nowrap !important; align-items: stretch !important; gap: 8px !important; }
+.selbar .srow { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.selbar .srow .q { flex: 1 1 auto; min-width: 0; }
+.selbar .trow { min-width: 0; }
+.selbar .srow .x { width: 34px; height: 34px; padding: 0; flex: none; font-size: 18px; }
+.selbar .trow { overflow-x: auto; scrollbar-width: none; margin: 0 -4px; padding: 2px 4px; }
+.selbar .trow::-webkit-scrollbar { display: none; }
+.selbar .trow .grp { display: flex; flex-wrap: nowrap; gap: 6px; width: max-content; }
+.selbar .trow .tool { white-space: nowrap; padding: 7px 11px; font-size: 13px; }
+.selbar .pal .dot { width: 30px; height: 30px; }
+.selbar .hlbtn { display: inline-flex; align-items: center; gap: 6px; }
+.selbar .sw-dot { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid rgb(255 255 255 / .7); display: inline-block; }
+.selbar .numdot { display: inline-grid; place-items: center; min-width: 17px; height: 17px; border-radius: 9px; background: var(--paper); color: var(--ink); font-size: 11px; font-weight: 700; }
+.selbar .pal { gap: 8px; }
+.selbar .dot[aria-pressed="true"] { outline: 2px solid var(--paper); outline-offset: 2px; }
 </style>
 <style id="userTheme"></style>
 
 <header class="bar">
   <div class="bar-in">
-    <div class="brand"><span class="ar">رياض الصالحين</span><span class="lat">Riyadus Salihin · Melayu</span></div>
+    <div class="brand"><span class="ar">رياض الصالحين</span><span class="lat">Riyadhus Salihin · Melayu</span></div>
     <div class="tools" role="toolbar" aria-label="Alat">
       <button type="button" class="tb" id="openIndex" title="Senarai bab" aria-label="Senarai bab"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
       <button type="button" class="tb" id="btnView" title="Paparan" aria-label="Paparan" aria-expanded="false" aria-controls="pView"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
-      <button type="button" class="tb" id="btnPen" title="Pen: serlah, garis, pindaan" aria-label="Pen" aria-pressed="false"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4z"/><path d="M14.5 5.5l3 3"/></svg></button>
       <button type="button" class="tb" id="btnNotes" title="Nota saya" aria-label="Nota saya" aria-expanded="false" aria-controls="pNotes"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5z"/><path d="M9 3v18M3 7h4M3 11h4M3 15h4"/></svg><span class="badge" id="noteCount" hidden></span></button>
       <button type="button" class="tb" id="btnSearch" title="Cari" aria-label="Cari" aria-expanded="false"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
       <button type="button" class="tb" id="btnSet" title="Tetapan" aria-label="Tetapan" aria-expanded="false" aria-controls="pSet"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
@@ -359,7 +378,7 @@ babs.forEach((b, i) => { const m = b.title.match(/^(\d+)\.\s*(.*)$/); b.n = m ? 
 babs.sort((a, b) => a.n - b.n);
 
 $('#notice').innerHTML = '<strong>Draf terjemahan, belum disemak.</strong> Terjemahan Melayu dibuat oleh AI daripada teks Arab dan perlu disemak oleh ahli ilmu sebelum dijadikan rujukan. ' +
-  'Baris (harakat) pada teks Arab juga ditambah oleh AI dan perlu disemak. Nombor hadis mengikut susunan sunnah.com. Sudah siap: <strong>' + DATA.hadith.length + ' daripada ' + DATA.total + '</strong> hadis.<br><strong>Nota peribadi:</strong> tekan ikon pen, pilih teks, kemudian pilih warna serlahan, garis, nota atau pindaan. Semua nota anda terkumpul di ikon buku nota. Teks asal tidak berubah, dan nota anda tidak dilihat oleh orang lain.' +
+  'Baris (harakat) pada teks Arab juga ditambah oleh AI dan perlu disemak. Nombor hadis mengikut susunan sunnah.com. Sudah siap: <strong>' + DATA.hadith.length + ' daripada ' + DATA.total + '</strong> hadis.<br><strong>Nota peribadi:</strong> pilih (tekan lama) mana-mana teks, dan menu akan muncul untuk menyerlah, menggaris, meletak nombor, menulis nota atau pindaan. Semua nota anda terkumpul di ikon buku nota. Teks asal tidak berubah, dan nota anda tidak dilihat oleh orang lain.' +
   '<div class="legend"><span><span class="nb-q">Tulisan tebal berwarna</span> = sabda Nabi ﷺ</span><span><span class="nb-f">Latar berwarna</span> = perbuatan Nabi ﷺ</span></div>';
 
 function srcLabel(t) {
@@ -379,7 +398,7 @@ let annOn = store.get('rs-ann', true);
 let altInline = store.get('rs-alt', false);
 let db = null, canWrite = false, annReady = false;
 const HMAP = new Map(DATA.hadith.map(h => [h.no, h]));
-const KIND = { serlah: 'Serlahan', garis: 'Garis bawah', nota: 'Nota', pindaan: 'Pindaan terjemahan', umum: 'Nota umum' };
+const KIND = { serlah: 'Serlahan', garis: 'Garis bawah', nombor: 'Nombor', nota: 'Nota', pindaan: 'Pindaan terjemahan', umum: 'Nota umum' };
 const LETTERS = 'abcdefghijklmnopqrstuvwxyz';
 const lblOf = (a, i) => String(i + 1);
 
@@ -429,7 +448,7 @@ function layered(text, from, to, anns, nab, q) {
       cur = ar || null;
       if (cur) {
         const a = cur.a, alt = a.type === 'pindaan' && altInline && a.alt;
-        out += '<mark class="ann t-' + esc(a.type) + ' c-' + esc(a.color || 'y') + (alt ? ' alt-on' : '') + (a.scope === 'saya' ? ' s-saya' : '') + ((a.type === 'serlah' || a.type === 'garis') && !a.text ? ' bare' : '') + '" data-ann="' + esc(a.id) + '" data-n="' + esc(a.n) + '" tabindex="0" role="button" aria-label="Nota ' + esc(a.n) + '">';
+        out += '<mark class="ann t-' + esc(a.type) + ' c-' + esc(a.color || 'y') + (alt ? ' alt-on' : '') + (a.scope === 'saya' ? ' s-saya' : '') + ((a.type === 'serlah' || a.type === 'garis') && !a.text ? ' bare' : '') + '" data-num="' + esc(a.num || '') + '" data-ann="' + esc(a.id) + '" data-n="' + esc(a.n) + '" tabindex="0" role="button" aria-label="Nota ' + esc(a.n) + '">';
         if (alt) {
           const nb = inR(cur.s, nab, r => r);
           out += (nb && nabOn ? '<span class="nb nb-' + nb[2] + '">' : '') + esc(a.alt) + (nb && nabOn ? '</span>' : '');
@@ -572,7 +591,7 @@ $('#list').addEventListener('click', e => {
   const cp = e.target.closest('[data-copy]');
   if (cp) {
     const h = DATA.hadith.find(x => x.no === +cp.dataset.copy);
-    const text = 'Riyadus Salihin, Hadis ' + h.no + '\n\n' + h.ar + '\n\n' + h.ms + '\n\n(' + h.takhrij + ')';
+    const text = 'Riyadhus Salihin, Hadis ' + h.no + '\n\n' + h.ar + '\n\n' + h.ms + '\n\n(' + h.takhrij + ')';
     const ok = () => toast('Hadis ' + h.no + ' disalin');
     try {
       navigator.clipboard.writeText(text).then(ok, () => fallbackCopy(text, ok));
@@ -644,30 +663,40 @@ document.addEventListener('keydown', e => {
 const selbar = $('#selbar');
 let pending = null, selT;
 function countIn(hay, needle) { let c = 0, i = hay.indexOf(needle); while (i >= 0) { c++; i = hay.indexOf(needle, i + needle.length); } return c; }
-let penOn = false, penTool = 'y';
-const TOOLS = [['y', 'Serlahan warna 1', 'dot', 'var(--hl-y)'], ['g', 'Serlahan warna 2', 'dot', 'var(--hl-g)'], ['p', 'Serlahan warna 3', 'dot', 'var(--hl-p)'], ['garis', 'Garis', 'ul'], ['nota', 'Nota'], ['pindaan', 'Pindaan']];
+const HLC = [["y", "Kuning"], ["o", "Oren"], ["r", "Merah"], ["p", "Merah jambu"], ["u", "Ungu"], ["b", "Biru"], ["t", "Biru laut"], ["g", "Hijau"], ["l", "Hijau pucuk"], ["k", "Kelabu"]];
+let hlLast = store.get('rs-hl', 'y'), selView = 'main';
+const SVG_NUM = '<span class="numdot">1</span>';
 function drawSelbar(hint) {
-  if (!penOn) { selbar.hidden = true; return; }
-  const q = pending ? '“' + esc(pending.quote) + '”' : esc(hint || 'Pilih teks, kemudian pilih alat.');
-  selbar.innerHTML = '<span class="q" dir="auto">' + q + '</span><span class="grp">' + TOOLS.map(([k, n, cls, bg]) =>
-    '<button type="button" class="tool ' + (cls || '') + '" data-sel="' + k + '" title="' + n + '" aria-label="' + n + '"' + (bg ? ' style="background:' + bg + '"' : '') + '>' + (cls === 'dot' ? '' : n) + '</button>').join('') +
-    '</span><button type="button" class="pri" data-sel="done">Selesai</button>';
-  selbar.hidden = false;
+  if (!pending && !hint) { selbar.hidden = true; document.body.classList.remove('selon'); return; }
+  const q = pending ? '“' + esc(pending.quote) + '”' : esc(hint);
+  let tools = '', top = '<button type="button" class="x" data-sel="cancel" aria-label="Tutup">×</button>';
+  if (pending && selView === 'warna') {
+    top = '<button type="button" data-sel="back">‹ Kembali</button>';
+    tools = '<span class="grp pal" role="group" aria-label="Pilih warna serlahan">' + HLC.map(([k, n]) => '<button type="button" class="tool dot" data-sel="hl" data-c="' + k + '" title="' + n + '" aria-label="' + n + '" aria-pressed="' + (k === hlLast) + '" style="background:var(--hl-' + k + ')"></button>').join('') + '</span>';
+  } else if (pending) {
+    tools = '<span class="grp"><button type="button" class="tool hlbtn" data-sel="warna" title="Serlah" aria-label="Serlah — pilih warna"><span class="sw-dot" style="background:var(--hl-' + hlLast + ')"></span>Serlah ▾</button>' +
+      '<button type="button" class="tool ul" data-sel="garis">Garis</button>' +
+      '<button type="button" class="tool" data-sel="nombor" title="Letak nombor">' + SVG_NUM + ' Nombor</button>' +
+      '<button type="button" class="tool" data-sel="nota">Nota</button>' +
+      (pending.field === 'ms' ? '<button type="button" class="tool" data-sel="pindaan">Pindaan</button>' : '') + '</span>';
+  }
+  selbar.innerHTML = '<div class="srow"><span class="q" dir="auto">' + q + '</span>' + top + '</div>' + (tools ? '<div class="trow">' + tools + '</div>' : '');
+  selbar.hidden = false; document.body.classList.add('selon');
 }
-function hideSelbar() { pending = null; drawSelbar(); }
+function hideSelbar() { pending = null; selView = 'main'; drawSelbar(); }
 function readSelection() {
-  if (!penOn || !$('#modalBg').hidden) return;
+  if (!$('#modalBg').hidden) return;
   const sel = window.getSelection();
-  if (!sel || !sel.rangeCount || sel.isCollapsed) { pending = null; drawSelbar(); return; }
+  if (!sel || !sel.rangeCount || sel.isCollapsed) { hideSelbar(); return; }
   const r = sel.getRangeAt(0);
   const node = r.commonAncestorContainer.nodeType === 1 ? r.commonAncestorContainer : r.commonAncestorContainer.parentElement;
   const box = node && node.closest('.ms-text, .ar-text');
   const art = box && box.closest('.hadith');
-  if (!art) { pending = null; drawSelbar(); return; }
+  if (!art) { hideSelbar(); return; }
   const h = HMAP.get(+art.dataset.no);
   const field = box.classList.contains('ar-text') ? 'ar' : 'ms';
   const quote = sel.toString().replace(/[﴿﴾]/g, '').replace(/\s+/g, ' ').trim();
-  pending = null;
+  pending = null; selView = 'main';
   if (!quote) { drawSelbar(); return; }
   if (field === 'ar' && !barisOn) { drawSelbar('Hidupkan baris (ikon mata) untuk menanda teks Arab.'); return; }
   if (!h[field].includes(quote)) { drawSelbar('Pilih teks dalam satu perenggan sahaja, tanpa melintasi tanda lain.'); return; }
@@ -676,34 +705,35 @@ function readSelection() {
   pending = { no: h.no, field, quote, occ: Math.max(0, occ) };
   drawSelbar();
 }
-function setPen(on) {
-  penOn = on; $('#btnPen').setAttribute('aria-pressed', on); document.body.classList.toggle('pen', on);
-  pending = null; drawSelbar();
-  if (on) { closePanels(); toast('Pen aktif: pilih teks, kemudian pilih alat.'); }
+function nextNum(no) {
+  const nums = myNotes().filter(a => a.no === no && a.type === 'nombor').map(a => parseInt(a.num, 10)).filter(n => !isNaN(n));
+  return String(nums.length ? Math.max(...nums) + 1 : 1);
 }
 document.addEventListener('selectionchange', () => { clearTimeout(selT); selT = setTimeout(readSelection, 250); });
 selbar.addEventListener('mousedown', e => e.preventDefault());
 selbar.addEventListener('click', e => {
   const b = e.target.closest('[data-sel]'); if (!b) return;
   const kind = b.dataset.sel, p = pending;
-  if (kind === 'done') { setPen(false); try { window.getSelection().removeAllRanges(); } catch (err) {} return; }
-  if (!p) { toast('Pilih teks dahulu.'); return; }
-  if (kind === 'pindaan' && p.field !== 'ms') { toast('Pindaan hanya untuk terjemahan Melayu.'); return; }
+  if (kind === 'warna') { selView = 'warna'; drawSelbar(); return; }
+  if (kind === 'back') { selView = 'main'; drawSelbar(); return; }
+  if (kind === 'cancel' || !p) { try { window.getSelection().removeAllRanges(); } catch (err) {} hideSelbar(); return; }
   try { window.getSelection().removeAllRanges(); } catch (err) {}
-  pending = null; drawSelbar();
+  hideSelbar();
+  if (kind === 'hl') { hlLast = b.dataset.c; store.set('rs-hl', hlLast); quickMark(p, 'serlah', hlLast); return; }
   if (kind === 'garis') { quickMark(p, 'garis', 'p'); return; }
-  if (kind === 'y' || kind === 'g' || kind === 'p') { quickMark(p, 'serlah', kind); return; }
-  openEditor(Object.assign({}, p, { type: kind, color: 'y', alt: kind === 'pindaan' ? p.quote : '', scope: 'saya' }));
+  if (kind === 'nombor') { quickMark(p, 'nombor', '', nextNum(p.no)); return; }
+  openEditor(Object.assign({}, p, { type: kind, color: '', alt: kind === 'pindaan' ? p.quote : '', scope: 'saya' }));
 });
 
-async function quickMark(p, type, color) {
+async function quickMark(p, type, color, num) {
   const h = HMAP.get(p.no), st = findOcc(h[p.field] || '', p.quote, p.occ || 0), en = st + p.quote.length;
   if ((h._anns || prepAnns(h)).some(x => x.field === p.field && x.pos >= 0 && st < x.pos + x.quote.length && x.pos < en)) { toast('Bahagian ini sudah ditanda. Ketik tanda itu untuk mengubahnya.'); return; }
-  const id = newId(), body = { no: p.no, type, field: p.field, quote: p.quote, occ: p.occ || 0, text: '', alt: '', color, at: Date.now() };
+  const id = newId(), body = { no: p.no, type, field: p.field, quote: p.quote, occ: p.occ || 0, text: '', alt: '', color: color || '', at: Date.now() };
+  if (type === 'nombor') body.num = num || '1';
   try {
     const where = await savePersonal(id, body, false);
     if (where === 'local') render();
-    toast(type === 'garis' ? 'Digaris.' : 'Diserlah.');
+    toast(type === 'garis' ? 'Digaris.' : type === 'nombor' ? 'Nombor ' + body.num + ' ditambah. Ketik untuk menukar.' : 'Diserlah.');
   } catch (err) { writeFailed(err); }
 }
 
@@ -719,15 +749,22 @@ function openEditor(a) {
   if (isNew && canWrite) html += '<div class="scope" role="radiogroup" aria-label="Siapa boleh melihat"><label><input type="radio" name="scope" id="sc-guru" value="guru"' + (a.scope !== 'saya' ? ' checked' : '') + '> Untuk semua pelajar</label><label><input type="radio" name="scope" id="sc-saya" value="saya"' + (a.scope === 'saya' ? ' checked' : '') + '> Saya sahaja</label></div>';
   if (type === 'serlah' || type === 'garis') {
     html += '<label>Gaya<span class="scope" role="radiogroup"><label><input type="radio" name="style" value="serlah"' + (type === 'serlah' ? ' checked' : '') + '> Serlah</label><label><input type="radio" name="style" value="garis"' + (type === 'garis' ? ' checked' : '') + '> Garis bawah</label></span></label>';
-    html += '<label>Warna<span class="swatches">' + [['y', 'Warna 1', '--hl-y'], ['g', 'Warna 2', '--hl-g'], ['p', 'Warna 3', '--hl-p']].map(([c, n, v]) =>
-      '<label title="' + n + '"><input type="radio" name="color" id="col-' + c + '" value="' + c + '"' + ((a.color || 'y') === c ? ' checked' : '') + '><span style="background:var(' + (type === 'garis' ? '--ul-' + c : v) + ')"></span><span hidden>' + n + '</span></label>').join('') + '</span></label>';
+    html += '<div id="colWrap">' + colorField(type, a.color) + '</div>';
   }
+  if (type === 'nombor') html += '<label for="f-num">Nombor atau label (cth. 1, 2, a, i)<input id="f-num" name="num" maxlength="6" required value="' + esc(a.num || '') + '" style="border:1px solid var(--rule);border-radius:8px;padding:8px 10px;background:var(--paper)"></label>';
   if (type === 'pindaan') html += '<label for="f-alt">Terjemahan pilihan anda<textarea id="f-alt" name="alt" required>' + esc(a.alt || '') + '</textarea></label>';
-  html += '<label for="f-text">' + ((type === 'serlah' || type === 'garis') ? 'Nota (pilihan)' : type === 'pindaan' ? 'Sebab atau penjelasan (pilihan)' : 'Nota') + '<textarea id="f-text" name="text"' + ((type === 'nota' || type === 'umum') ? ' required' : '') + '>' + esc(a.text || '') + '</textarea></label>';
+  html += '<label for="f-text">' + ((type === 'serlah' || type === 'garis' || type === 'nombor') ? 'Nota (pilihan)' : type === 'pindaan' ? 'Sebab atau penjelasan (pilihan)' : 'Nota') + '<textarea id="f-text" name="text"' + ((type === 'nota' || type === 'umum') ? ' required' : '') + '>' + esc(a.text || '') + '</textarea></label>';
   html += '<div class="btns"><button type="button" data-m="cancel">Batal</button><button type="submit" class="pri">Simpan</button></div>';
   modal.innerHTML = html; modalBg.hidden = false;
-  const f = modal.querySelector('textarea'); if (f) f.focus();
+  const f = modal.querySelector('#f-num') || modal.querySelector('textarea'); if (f) f.focus();
 }
+function colorField(type, cur) {
+  const list = type === 'garis' ? [['p', 'Warna garis utama', '--ul-p'], ['y', 'Emas', '--ul-y'], ['g', 'Hijau', '--ul-g']] : HLC.map(([k, n]) => [k, n, '--hl-' + k]);
+  if (!list.some(x => x[0] === cur)) cur = list[0][0];
+  return '<label>Warna<span class="swatches" style="flex-wrap:wrap">' + list.map(([c, n, v]) =>
+    '<label title="' + n + '"><input type="radio" name="color" value="' + c + '"' + (cur === c ? ' checked' : '') + '><span style="background:var(' + v + ')"></span><span hidden>' + n + '</span></label>').join('') + '</span></label>';
+}
+modal.addEventListener('change', e => { if (e.target.name === 'style' && $('#colWrap')) $('#colWrap').innerHTML = colorField(e.target.value, editing && editing.color); });
 function openDelete(a) {
   editing = a;
   modal.innerHTML = '<h2>Padam ' + esc((KIND[a.type] || 'nota').toLowerCase()) + '?</h2><p style="margin:0;color:var(--ink-soft)">Ia akan dibuang daripada nota anda. Teks hadis tidak berubah.</p>' +
@@ -758,8 +795,11 @@ modal.addEventListener('submit', async e => {
   const scope = editing.id ? editing.scope : (canWrite ? String(fd.get('scope') || 'guru') : 'saya');
   const mk = editing.type === 'serlah' || editing.type === 'garis';
   const type = mk ? String(fd.get('style') || editing.type) : editing.type;
+  const num = String(fd.get('num') || '').trim().slice(0, 6);
+  if (type === 'nombor' && !num) { toast('Tulis nombor dahulu.'); return; }
   const body = { no: editing.no, type, field: editing.field || null, quote: editing.quote || '', occ: editing.occ || 0,
     text, alt: editing.type === 'pindaan' ? alt : '', color: mk ? String(fd.get('color') || 'y') : '', at: editing.at || Date.now() };
+  if (type === 'nombor') body.num = num;
   const btn = modal.querySelector('[type=submit]'); btn.disabled = true;
   try {
     if (scope === 'guru') {
@@ -811,7 +851,7 @@ function currentNo() {
 }
 function notesHtml() {
   const list = myNotes(), cur = currentNo();
-  const sw = a => a.type === 'serlah' ? '<span class="chip" style="background:var(--hl-' + esc(a.color || 'y') + ')"></span>' : a.type === 'garis' ? '<span class="chip" style="background:var(--ul-' + esc(a.color || 'p') + ')"></span>' : '';
+  const sw = a => a.type === 'serlah' ? '<span class="chip" style="background:var(--hl-' + esc(a.color || 'y') + ')"></span>' : a.type === 'garis' ? '<span class="chip" style="background:var(--ul-' + esc(a.color || 'p') + ')"></span>' : a.type === 'nombor' ? '<span class="chip" style="background:var(--jade);color:var(--sheet);width:auto;height:auto;padding:0 5px;border-radius:7px;font-size:10px;vertical-align:0">' + esc(a.num || '') + '</span>' : '';
   return '<button type="button" class="addn" data-addnote="' + cur + '">＋ Tambah nota pada Hadis ' + cur + '</button>' +
     '<div class="prow"><span class="plbl">Nota saya · ' + list.length + '</span>' +
     (list.length ? '<ol class="nlist">' + list.map(a => '<li><button type="button" data-goto="' + esc(a.id) + '" data-no="' + a.no + '"><span class="meta">' + sw(a) + 'Hadis ' + a.no + ' · ' + esc(KIND[a.type] || 'Nota') + '</span>' +
@@ -835,13 +875,12 @@ function togglePanel(p, btn) {
 }
 $('#btnView').addEventListener('click', () => togglePanel('#pView', '#btnView'));
 $('#btnNotes').addEventListener('click', () => togglePanel('#pNotes', '#btnNotes'));
-$('#btnPen').addEventListener('click', () => setPen(!penOn));
 /* Notes backup */
 function exportNotes() {
-  const notes = myNotes().map(a => ({ id: a.id, no: a.no, type: a.type, field: a.field || null, quote: a.quote || '', occ: a.occ || 0, text: a.text || '', alt: a.alt || '', color: a.color || '', at: a.at || 0 }));
+  const notes = myNotes().map(a => ({ id: a.id, no: a.no, type: a.type, field: a.field || null, quote: a.quote || '', occ: a.occ || 0, text: a.text || '', alt: a.alt || '', color: a.color || '', num: a.num || '', at: a.at || 0 }));
   if (!notes.length) { toast('Belum ada nota untuk dieksport.'); return; }
   const json = JSON.stringify({ app: 'riyadus-salihin-melayu', jenis: 'nota', dieksport: new Date().toISOString(), nota: notes });
-  const name = 'nota-riyadus-salihin-' + new Date().toISOString().slice(0, 10) + '.json';
+  const name = 'nota-riyadhus-salihin-' + new Date().toISOString().slice(0, 10) + '.json';
   if (window.RSApp && RSApp.shareFile) { RSApp.shareFile(name, json); return; }
   if (window.claude && window.claude.use) {
     window.claude.use('downloads').then(dl => {
@@ -877,6 +916,7 @@ async function doImport() {
     if (!a || typeof a.no !== 'number' || !HMAP.has(a.no) || !KIND[a.type]) continue;
     const id = a.id && /^[\w-]{1,64}$/.test(a.id) ? a.id : newId(); if (have.has(id)) continue;
     const body = { no: a.no, type: a.type, field: a.field === 'ar' || a.field === 'ms' ? a.field : null, quote: String(a.quote || ''), occ: +a.occ || 0, text: String(a.text || ''), alt: String(a.alt || ''), color: String(a.color || ''), at: +a.at || Date.now() };
+    if (a.type === 'nombor') body.num = String(a.num || '1').slice(0, 6);
     try { await savePersonal(id, body, false); n++; } catch (err) { writeFailed(err); break; }
   }
   closeModal(); render(); toast(n ? n + ' nota diimport.' : 'Tiada nota baharu untuk diimport.');
@@ -888,7 +928,7 @@ window.rsBack = function () {
   if (!$('#sheet').hidden) { closeSheet(); return true; }
   if (['#pView', '#pNotes', '#pSet'].some(p => !$(p).hidden)) { closePanels(); return true; }
   if (!$('#searchRow').hidden) { setSearch(false); return true; }
-  if (penOn) { setPen(false); return true; }
+  if (!selbar.hidden) { try { window.getSelection().removeAllRanges(); } catch (err) {} hideSelbar(); return true; }
   return false;
 };
 /* Settings: theme and colours (saved on this device) */
@@ -906,8 +946,8 @@ function applyTheme() {
   if (theme.mode === 'auto') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', theme.mode);
   const a = PAL.accent[theme.accent] || PAL.accent[0], m = PAL.matn[theme.matn] || PAL.matn[0], u = PAL.ul[theme.ul] || PAL.ul[0];
   const hl = theme.hl.map(i => PAL.hl[i] || PAL.hl[0]);
-  const L = '--jade:' + a[1] + ';--jade-tint:' + a[2] + ';--matn:' + m[1] + ';--matn-tint:' + m[2] + ';--ul-p:' + u[1] + ';--hl-y:' + hl[0][1] + ';--hl-g:' + hl[1][1] + ';--hl-p:' + hl[2][1] + ';';
-  const D = '--jade:' + a[3] + ';--jade-tint:' + a[4] + ';--matn:' + m[3] + ';--matn-tint:' + m[4] + ';--ul-p:' + u[2] + ';--hl-y:' + hl[0][2] + ';--hl-g:' + hl[1][2] + ';--hl-p:' + hl[2][2] + ';';
+  const L = '--jade:' + a[1] + ';--jade-tint:' + a[2] + ';--matn:' + m[1] + ';--matn-tint:' + m[2] + ';--ul-p:' + u[1] + ';';
+  const D = '--jade:' + a[3] + ';--jade-tint:' + a[4] + ';--matn:' + m[3] + ';--matn-tint:' + m[4] + ';--ul-p:' + u[2] + ';';
   $('#userTheme').textContent = ':root{' + L + '}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]):not([data-theme="sepia"]){' + D + '}}:root[data-theme="dark"]{' + D + '}';
   const mc = document.querySelector('meta[name="theme-color"]'); if (mc) mc.content = getComputedStyle(document.body).backgroundColor;
 }
@@ -918,9 +958,8 @@ function setHtml() {
   return '<div class="set-row"><span class="plbl">Tema</span><div class="opts">' + opt('mode', 'auto', 'Ikut peranti') + opt('mode', 'light', 'Cerah', '#ffffff') + opt('mode', 'sepia', 'Sepia', '#f3ead5') + opt('mode', 'dark', 'Gelap', '#18201d') + '</div></div>' +
     '<div class="set-row"><span class="plbl">Warna utama</span><div class="opts">' + PAL.accent.map((a, i) => opt('accent', i, a[0], a[1])).join('') + '</div></div>' +
     '<div class="set-row"><span class="plbl">Warna sabda Nabi ﷺ</span><div class="opts">' + PAL.matn.map((a, i) => opt('matn', i, a[0], a[1])).join('') + '</div></div>' +
-    '<div class="set-row"><span class="plbl">Warna serlahan</span>' + [0, 1, 2].map(k => '<div class="cswatch"><span class="lbl2">Warna ' + (k + 1) + '</span>' + sw('hl', PAL.hl, theme.hl[k], k) + '</div>').join('') + '</div>' +
     '<div class="set-row"><span class="plbl">Warna garis bawah</span><div class="cswatch">' + sw('ul', PAL.ul, theme.ul) + '</div></div>' +
-    '<div class="set-row"><span class="plbl">Contoh</span><div class="preview"><span class="nb-q">sabda Nabi ﷺ</span> · <span class="nb-f">perbuatan</span> · <mark class="ann t-serlah c-y bare">warna 1</mark> <mark class="ann t-serlah c-g bare">warna 2</mark> <mark class="ann t-serlah c-p bare">warna 3</mark> · <mark class="ann t-garis c-p bare">garis</mark></div></div>' +
+    '<div class="set-row"><span class="plbl">Contoh</span><div class="preview"><span class="nb-q">sabda Nabi ﷺ</span> · <span class="nb-f">perbuatan</span> · <mark class="ann t-serlah c-y bare">serlahan</mark> · <mark class="ann t-garis c-p bare">garis</mark> · <mark class="ann t-nombor bare" data-num="1">nombor</mark></div></div>' +
     '<button type="button" class="linkbtn" data-set="reset">Tetapkan semula warna asal</button>' +
     '<div class="set-row"><span class="plbl">Sandaran nota</span><div class="opts"><button type="button" data-set="export">Eksport nota</button><button type="button" data-set="import">Import nota</button></div>' +
     '<span style="font-size:12.5px;color:var(--ink-soft)">Simpan salinan nota anda, atau pindahkan nota antara laman web dan aplikasi.</span></div>' +

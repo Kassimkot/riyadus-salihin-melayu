@@ -1,8 +1,8 @@
 {
- "version": 202610201433,
+ "version": 202610210013,
  "page": "app.html",
- "sha256": "27801e4f249af143b4d4af42b62110e33ec0810f5de2a7d0de19bd372c38e28b",
- "apk_version": 2,
+ "sha256": "45d70517c75e4903812061a071baa3e40e03d8cd5c39e360fcdf93af077df2ec",
+ "apk_version": 3,
  "apk": "https://kassimkot.github.io/riyadus-salihin-melayu/riyadus-salihin.apk",
- "apk_nota": ""
+ "apk_nota": "Nama aplikasi kini \"Riyadhus Salihin\"."
 }

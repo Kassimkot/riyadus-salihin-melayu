@@ -1,4 +1,4 @@
-# Riyadus Salihin — Terjemahan Melayu
+# Riyadhus Salihin — Terjemahan Melayu
 
 Draf terjemahan Melayu bagi *Riyadh as-Salihin* karya Imam an-Nawawi, diterjemah daripada teks Arab dengan bantuan AI.
 
