@@ -13,18 +13,27 @@ for h in d['hadith']:
     x=dict(h); x['ar']=HK.get(str(h['no'])) or clean(A[h['no']-1]['arabic']); x['baris']=str(h['no']) in HK; H.append(x)
 HON=[('رضي الله عنه وعنها',None),('رضي الله عنهما','﵄'),('رضي الله عنهم','﵃'),('رضي الله عنهن','﵅'),('رضي الله عنها','﵂'),('رضي الله عنه','﵁'),
      ('عليهم السلام','﵈'),('عليها السلام','﵍'),('عليه السلام','﵇'),('رحمهم الله','﵏'),('رحمه الله','﵀')]
-def honor(t):
+def honor(t, spans=None):
+    # replace honorific phrases with single glyphs; remap [start,end) offsets that point into t
     if not t: return t
-    out=[];i=0
+    out=[];i=0;pos=[]  # pos[i] = index in output where input char i lands
     while i<len(t):
         for k,v in HON:
-            if t.startswith(k,i) and not (i+len(k)<len(t) and 'ء'<=t[i+len(k)]<='ي'):
-                out.append(v if v else k); i+=len(k); break
+            if t.startswith(k,i) and not (i+len(k)<len(t) and '\u0621'<=t[i+len(k)]<='\u064A'):
+                rep=v if v else k
+                for j in range(len(k)): pos.append(len(out) if v else len(out)+j)
+                out.extend(rep); i+=len(k); break
         else:
-            out.append(t[i]); i+=1
+            pos.append(len(out)); out.append(t[i]); i+=1
+    pos.append(len(out))
+    if spans is not None:
+        for sp in spans: sp[0]=pos[sp[0]]; sp[1]=pos[sp[1]]
     return ''.join(out)
+import copy
 for x in H:
-    for f in ('ms','takhrij','catatan','catatan_penterjemah'):
+    if x.get('nabawi'): x['nabawi']=copy.deepcopy(x['nabawi'])
+    x['ms']=honor(x['ms'], (x.get('nabawi') or {}).get('ms'))
+    for f in ('takhrij','catatan','catatan_penterjemah'):
         if x.get(f): x[f]=honor(x[f])
 for e in d.get('bab_kosong',[]):
     for f in ('penutup_ms',):
