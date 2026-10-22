@@ -307,6 +307,51 @@ body.no-ann .ann::after, body.no-ann .box.guru { display: none; }
 .sharegrid button:hover { border-color: var(--jade); }
 .sharegrid button:first-child { grid-column: 1 / -1; background: var(--jade-tint); border-color: var(--jade); color: var(--jade); font-weight: 600; }
 .sharegrid .si { flex: none; width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; background: var(--jade); color: #fff; font-weight: 700; font-size: 15px; }
+.crumbs { font-family: var(--font-ui); font-size: 13px; color: var(--ink-soft); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 0 0 18px; }
+.crumbs a { color: var(--jade); text-decoration: none; font-weight: 500; }
+.home { display: grid; gap: 18px; }
+.hero { background: var(--jade); color: #fff; border-radius: 16px; padding: 22px 20px 18px; text-align: center; }
+.hero-ar { font-family: var(--font-ar); font-size: 40px; line-height: 1.3; }
+.hero-ms { font-family: var(--font-body); font-size: 22px; font-weight: 700; margin-top: 2px; }
+.hero-sub { font-family: var(--font-ui); font-size: 12.5px; opacity: .85; margin-top: 2px; }
+.prog { display: block; height: 6px; border-radius: 3px; background: rgb(255 255 255 / .25); overflow: hidden; margin: 14px auto 6px; max-width: 360px; }
+.prog > span { display: block; height: 100%; background: var(--gold); }
+.hero .prog > span { background: #e8c46e; }
+.prog.sm { background: var(--rule); margin: 6px 0 2px; max-width: none; height: 4px; }
+.prog-l { font-family: var(--font-ui); font-size: 12px; opacity: .9; }
+.resume { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; align-items: center; text-decoration: none; color: var(--ink); background: var(--sheet); border: 1px solid var(--jade); border-radius: 14px; padding: 14px 16px; }
+.resume .r-l { font-family: var(--font-ui); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--jade); font-weight: 600; grid-column: 1; }
+.resume .r-t { font-family: var(--font-ui); font-weight: 600; font-size: 15px; grid-column: 1; }
+.resume .r-x { font-size: 14px; color: var(--ink-soft); grid-column: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.resume .r-go { grid-column: 2; grid-row: 1 / span 3; font-size: 28px; color: var(--jade); }
+.quick { display: flex; gap: 8px; flex-wrap: wrap; }
+.quick button { flex: 1 1 auto; border: 1px solid var(--rule); background: var(--sheet); border-radius: 999px; padding: 9px 12px; font-family: var(--font-ui); font-size: 13px; }
+.home .sec { font-family: var(--font-ui); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); margin: 6px 0 -6px; font-weight: 600; }
+.kitabs, .bablist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.kcard { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; text-decoration: none; color: var(--ink); background: var(--sheet); border: 1px solid var(--rule); border-radius: 12px; padding: 12px 14px; }
+.kcard:hover { border-color: var(--jade); }
+.kcard.off { opacity: .6; }
+.k-n { font-family: var(--font-ui); color: var(--gold); font-weight: 600; font-variant-numeric: tabular-nums; padding-top: 4px; }
+.k-body { display: grid; gap: 1px; min-width: 0; }
+.k-ar { font-family: var(--font-ar); font-size: 20px; color: var(--jade); text-align: right; }
+.k-ms { font-weight: 700; font-size: 16px; }
+.k-sub, .k-st { font-family: var(--font-ui); font-size: 12px; color: var(--ink-soft); }
+.khead { border-bottom: 2px solid var(--jade); padding-bottom: 12px; margin-bottom: 14px; }
+.khead .k-ar { font-size: 28px; text-align: right; }
+.khead h2 { margin: 2px 0; font-size: calc(26px * var(--scale)); }
+.bablist a { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; text-decoration: none; color: var(--ink); background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; font-size: 16px; }
+.bablist a:hover { border-color: var(--jade); }
+.bablist .n { font-family: var(--font-ui); color: var(--gold); font-weight: 600; }
+.bablist .c { font-family: var(--font-ui); font-size: 12px; color: var(--ink-soft); white-space: nowrap; }
+.babnav { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 36px; }
+.babnav a { display: grid; gap: 2px; text-decoration: none; color: var(--ink); border: 1px solid var(--rule); background: var(--sheet); border-radius: 12px; padding: 12px 14px; }
+.babnav a.nx { text-align: right; border-color: var(--jade); }
+.babnav small { font-family: var(--font-ui); font-size: 11.5px; color: var(--jade); font-weight: 600; }
+.babnav span { font-size: 14.5px; }
+.index a.side-home, .side-home { display: inline-block; padding: 0; font-size: 13px; color: var(--jade); text-decoration: none; margin-bottom: 12px; font-weight: 500; }
+a.range { color: var(--jade); text-decoration: none; }
+body[data-view="home"] .wrap > .index, body[data-view="kitab"] .wrap > .index { display: none; }
+body[data-view="home"] .wrap, body[data-view="kitab"] .wrap { grid-template-columns: minmax(0, 1fr); max-width: 760px; }
 </style>
 <style id="userTheme"></style>
 
@@ -314,7 +359,7 @@ body.no-ann .ann::after, body.no-ann .box.guru { display: none; }
   <div class="bar-in">
     <div class="brand"><span class="ar">رياض الصالحين</span><span class="lat">Riyadhus Salihin · Melayu</span></div>
     <div class="tools" role="toolbar" aria-label="Alat">
-      <button type="button" class="tb" id="openIndex" title="Senarai bab" aria-label="Senarai bab"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <button type="button" class="tb" id="openIndex" title="Utama: senarai kitab dan bab" aria-label="Utama"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
       <button type="button" class="tb" id="btnView" title="Paparan" aria-label="Paparan" aria-expanded="false" aria-controls="pView"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
       <button type="button" class="tb" id="btnNotes" title="Nota saya" aria-label="Nota saya" aria-expanded="false" aria-controls="pNotes"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5z"/><path d="M9 3v18M3 7h4M3 11h4M3 15h4"/></svg><span class="badge" id="noteCount" hidden></span></button>
       <button type="button" class="tb" id="btnSearch" title="Cari" aria-label="Cari" aria-expanded="false"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
@@ -352,7 +397,6 @@ body.no-ann .ann::after, body.no-ann .box.guru { display: none; }
 <div class="wrap">
   <nav class="index" id="index" aria-label="Senarai bab"></nav>
   <main id="main">
-    <div class="notice" id="notice"></div>
     <div id="list"></div>
   </main>
 </div>
@@ -388,7 +432,7 @@ babs.forEach((b, i) => { const m = b.title.match(/^(\d+)\.\s*(.*)$/); b.n = m ? 
 (DATA.bab_kosong || []).forEach(e => { const m = e.bab.match(/^(\d+)\.\s*(.*)$/); babs.push({ title: e.bab, items: [], n: m[1], name: m[2].replace(/^Bab\s+/i, ''), id: 'bab-' + m[1], nota: e.nota, raw: e }); });
 babs.sort((a, b) => a.n - b.n);
 
-$('#notice').innerHTML = '<strong>Draf terjemahan, belum disemak.</strong> Terjemahan Melayu dibuat oleh AI daripada teks Arab dan perlu disemak oleh ahli ilmu sebelum dijadikan rujukan. ' +
+const NOTICE = '<strong>Draf terjemahan, belum disemak.</strong> Terjemahan Melayu dibuat oleh AI daripada teks Arab dan perlu disemak oleh ahli ilmu sebelum dijadikan rujukan. ' +
   'Baris (harakat) pada teks Arab juga ditambah oleh AI dan perlu disemak. Nombor hadis mengikut susunan sunnah.com. Sudah siap: <strong>' + DATA.hadith.length + ' daripada ' + DATA.total + '</strong> hadis.<br><strong>Nota peribadi:</strong> pilih (tekan lama) mana-mana teks, dan menu akan muncul untuk menyerlah, menggaris, meletak nombor, menulis nota atau pindaan. Semua nota anda terkumpul di ikon buku nota. Teks asal tidak berubah, dan nota anda tidak dilihat oleh orang lain.' +
   '<div class="legend"><span><span class="nb-q">Tulisan tebal berwarna</span> = sabda Nabi ﷺ</span><span><span class="nb-f">Latar berwarna</span> = perbuatan Nabi ﷺ</span></div>';
 
@@ -540,16 +584,59 @@ function babAyat(b) {
   h += '<div class="box quran"><div class="src">' + esc(e.sumber || '') + '</div></div></div>';
   return h;
 }
-function render() {
-  const raw = $('#q').value.trim();
-  const q = raw.toLowerCase();
-  const num = /^\d+$/.test(raw) ? +raw : null;
+/* ---------- Kitab structure, routing (home → kitab → bab), resume reading ---------- */
+const KITAB = [
+  [0, 'كتاب المقدمات', 'Kitab al-Muqaddimat', 'Pendahuluan: akhlak dan amalan asas', 1, 679],
+  [1, 'كتاب الأدب', 'Kitab al-Adab', 'Adab dan budi pekerti', 680, 726],
+  [2, 'كتاب أدب الطعام', 'Kitab Adab Makan', 'Adab makan dan minum', 727, 777],
+  [3, 'كتاب اللباس', 'Kitab Pakaian', 'Adab berpakaian', 778, 812],
+  [4, 'كتاب آداب النوم', 'Kitab Adab Tidur', 'Tidur, berbaring dan duduk', 813, 843],
+  [5, 'كتاب السلام', 'Kitab Salam', 'Memberi dan menjawab salam', 844, 893],
+  [6, 'كتاب عيادة المريض', 'Kitab Menziarahi Orang Sakit', 'Orang sakit dan urusan jenazah', 894, 955],
+  [7, 'كتاب آداب السفر', 'Kitab Adab Bermusafir', 'Adab dalam perjalanan', 956, 990],
+  [8, 'كتاب الفضائل', 'Kitab Kelebihan Amalan', 'Al-Fadha\'il', 991, 1267],
+  [9, 'كتاب الاعتكاف', 'Kitab Iktikaf', 'Beriktikaf di masjid', 1268, 1270],
+  [10, 'كتاب الحج', 'Kitab Haji', 'Kelebihan haji dan umrah', 1271, 1284],
+  [11, 'كتاب الجهاد', 'Kitab Jihad', 'Jihad dan syahid', 1285, 1375],
+  [12, 'كتاب العلم', 'Kitab Ilmu', 'Menuntut dan menyampaikan ilmu', 1376, 1392],
+  [13, 'كتاب حمد الله تعالى وشكره', 'Kitab Memuji dan Bersyukur', 'Memuji dan bersyukur kepada Allah', 1393, 1396],
+  [14, 'كتاب الصلاة على رسول الله ﷺ', 'Kitab Selawat', 'Berselawat ke atas Rasulullah ﷺ', 1397, 1407],
+  [15, 'كتاب الأذكار', 'Kitab Zikir', 'Zikir dan mengingati Allah', 1408, 1464],
+  [16, 'كتاب الدعوات', 'Kitab Doa', 'Doa-doa', 1465, 1510],
+  [17, 'كتاب الأمور المنهي عنها', 'Kitab Perkara yang Dilarang', 'Larangan-larangan', 1511, 1807],
+  [18, 'كتاب المنثورات والملح', 'Kitab Pelbagai Hadis Berharga', 'Al-Manthurat wal-Mulah', 1808, 1868],
+  [19, 'كتاب الاستغفار', 'Kitab Istighfar', 'Memohon keampunan', 1869, 1896]
+].map(([id, ar, ms, sub, from, to]) => ({ id, ar, ms, sub, from, to, babs: [] }));
+const kitabOfNo = no => KITAB.find(k => no >= k.from && no <= k.to) || KITAB[0];
+{ let last = KITAB[0]; babs.forEach(b => { const k = b.items.length ? kitabOfNo(b.items[0].no) : last; b.k = k; k.babs.push(b); last = k; }); }
+const babById = n => babs.find(b => String(b.n) === String(n));
+const babOfNo = no => babs.find(b => b.items.some(h => h.no === no));
+let nav = { v: 'home' };
+function parseHash() {
+  const h = decodeURIComponent(location.hash || '');
+  let m;
+  if ((m = /^#\/kitab\/(\d+)/.exec(h))) return { v: 'kitab', k: +m[1] };
+  if ((m = /^#\/bab\/(\d+)/.exec(h)) && babById(m[1])) return { v: 'bab', b: m[1] };
+  if ((m = /^#bab-(\d+)/.exec(h)) && babById(m[1])) return { v: 'bab', b: m[1] };
+  if ((m = /^#h(\d+)/.exec(h)) && babOfNo(+m[1])) return { v: 'bab', b: babOfNo(+m[1]).n, h: +m[1] };
+  return { v: 'home' };
+}
+function go(hash) { if (location.hash === hash) route(); else location.hash = hash; }
+function route() {
+  nav = parseHash();
+  if ($('#q').value || onlyMarks) { $('#q').value = ''; onlyMarks = false; $('#onlyMarks').setAttribute('aria-pressed', false); $('#searchRow').hidden = true; $('#btnSearch').setAttribute('aria-expanded', false); }
+  closeSheet(); closePop(); closePanels();
+  render();
+  if (nav.h) { const el = document.getElementById('h' + nav.h); if (el) el.scrollIntoView({ block: 'start', behavior: 'instant' }); }
+  else window.scrollTo({ top: 0, behavior: 'instant' });
+  if (nav.v === 'bab') { const b = babById(nav.b); const n = nav.h || (b && b.items[0] && b.items[0].no); if (n) store.set('rs-last', n); }
+}
+window.addEventListener('hashchange', route);
+function filteredHtml(raw) {
+  const q = raw.toLowerCase(), num = /^\d+$/.test(raw) ? +raw : null;
   let html = '', shown = 0;
   babs.forEach(b => {
-    if (!b.items.length) {
-      if (!q && !onlyMarks) html += '<section class="bab" id="' + b.id + '"><div class="bab-head"><span class="num">Bab ' + b.n + '</span><h2>' + esc(b.name) + '</h2><span class="range">Ayat al-Quran sahaja</span></div>' + babAyat(b) + '</section>';
-      return;
-    }
+    if (!b.items.length) return;
     const items = b.items.filter(h => {
       if (onlyMarks && !marks.has(h.no)) return false;
       if (!q) return true;
@@ -558,21 +645,83 @@ function render() {
     });
     if (!items.length) return;
     shown += items.length;
-    const first = b.items[0].no, last = b.items[b.items.length - 1].no;
     html += '<section class="bab" id="' + b.id + '"><div class="bab-head"><span class="num">Bab ' + b.n + '</span><h2>' + esc(b.name) + '</h2>' +
-      '<span class="range">Hadis ' + first + '–' + last + '</span></div>' +
-      items.map(h => card(h, num === null ? raw : '')).join('') + '</section>';
+      '<a class="range" href="#/bab/' + b.n + '">Buka bab ›</a></div>' + items.map(h => card(h, num === null ? raw : '')).join('') + '</section>';
   });
-  if (!shown) html = '<div class="empty">' + (onlyMarks && !q ? 'Belum ada hadis yang ditanda. Tekan ☆ Tanda pada mana-mana hadis.' : 'Tiada hadis yang sepadan dengan carian ini.') + '</div>';
+  const title = onlyMarks && !q ? 'Hadis bertanda ★' : 'Carian: “' + esc(raw) + '”';
+  return '<div class="crumbs"><a href="#/" data-clear>‹ Utama</a><span>' + title + ' · ' + shown + ' hadis</span></div>' +
+    (shown ? html : '<div class="empty">' + (onlyMarks && !q ? 'Belum ada hadis yang ditanda. Tekan ☆ Tanda pada mana-mana hadis.' : 'Tiada hadis yang sepadan dengan carian ini.') + '</div>');
+}
+function lastRead() { const n = store.get('rs-last', 0); return n && HMAP.get(n) ? HMAP.get(n) : null; }
+function homeHtml() {
+  const done = DATA.hadith.length, lr = lastRead();
+  let h = '<section class="home">';
+  h += '<div class="hero"><div class="hero-ar" lang="ar" dir="rtl">رياض الصالحين</div><div class="hero-ms">Riyadhus Salihin</div><div class="hero-sub">Imam an-Nawawi · Terjemahan Melayu</div>' +
+    '<div class="prog"><span style="width:' + (done / DATA.total * 100).toFixed(1) + '%"></span></div><div class="prog-l">' + done + ' daripada ' + DATA.total + ' hadis telah diterjemah</div></div>';
+  if (lr) {
+    const b = babOfNo(lr.no);
+    h += '<a class="resume" href="#h' + lr.no + '"><span class="r-l">Sambung bacaan</span><span class="r-t">Hadis ' + lr.no + ' · Bab ' + b.n + ': ' + esc(b.name) + '</span>' +
+      '<span class="r-x">' + esc(plainMs(lr).slice(0, 110)) + '…</span><span class="r-go">›</span></a>';
+  } else {
+    h += '<a class="resume" href="#/bab/1"><span class="r-l">Mula membaca</span><span class="r-t">Bab 1: ' + esc(babById(1).name) + '</span><span class="r-go">›</span></a>';
+  }
+  const nNotes = myNotes().length;
+  h += '<div class="quick"><button type="button" data-q="search">⌕ Cari hadis</button><button type="button" data-q="marks">★ Bertanda · ' + marks.size + '</button><button type="button" data-q="notes">Nota saya · ' + nNotes + '</button></div>';
+  h += '<h3 class="sec">Kitab</h3><ol class="kitabs">' + KITAB.map(k => {
+    const tr = DATA.hadith.filter(x => x.no >= k.from && x.no <= k.to).length, tot = k.to - k.from + 1, open = tr > 0;
+    return '<li><a class="kcard' + (open ? '' : ' off') + '" href="#/kitab/' + k.id + '">' +
+      '<span class="k-n">' + (k.id + 1) + '</span><span class="k-body"><span class="k-ar" lang="ar" dir="rtl">' + esc(k.ar) + '</span><span class="k-ms">' + esc(k.ms) + '</span>' +
+      '<span class="k-sub">' + esc(k.sub) + ' · Hadis ' + k.from + '–' + k.to + '</span>' +
+      (open ? '<span class="prog sm"><span style="width:' + (tr / tot * 100).toFixed(1) + '%"></span></span><span class="k-st">' + tr + '/' + tot + ' diterjemah</span>' : '<span class="k-st">Belum diterjemah</span>') +
+      '</span></a></li>';
+  }).join('') + '</ol>';
+  h += '<div class="notice" id="notice">' + NOTICE + '</div></section>';
+  return h;
+}
+function kitabHtml(k) {
+  const tr = DATA.hadith.filter(x => x.no >= k.from && x.no <= k.to).length, tot = k.to - k.from + 1;
+  let h = '<div class="crumbs"><a href="#/">‹ Utama</a></div>';
+  h += '<div class="khead"><div class="k-ar" lang="ar" dir="rtl">' + esc(k.ar) + '</div><h2>' + esc(k.ms) + '</h2><div class="k-sub">' + esc(k.sub) + ' · Hadis ' + k.from + '–' + k.to + ' · ' + tr + '/' + tot + ' diterjemah</div></div>';
+  if (!k.babs.length) return h + '<div class="empty">Kitab ini belum diterjemah. Insya-Allah akan menyusul.</div>';
+  h += '<ol class="bablist">' + k.babs.map(b => '<li><a href="#/bab/' + b.n + '"><span class="n">' + b.n + '</span><span class="t">' + esc(b.name) + '</span><span class="c">' +
+    (b.items.length ? b.items.length + ' hadis' : 'ayat') + '</span></a></li>').join('') + '</ol>';
+  const lastNo = k.babs.reduce((m, b) => b.items.length ? b.items[b.items.length - 1].no : m, k.from - 1);
+  if (lastNo < k.to) h += '<div class="todo">Bab seterusnya (Hadis ' + (lastNo + 1) + ' dan seterusnya) sedang diterjemah.</div>';
+  return h;
+}
+function babHtml(b) {
+  const i = babs.indexOf(b), prev = babs[i - 1], next = babs[i + 1];
+  let h = '<div class="crumbs"><a href="#/">Utama</a><span>›</span><a href="#/kitab/' + b.k.id + '">' + esc(b.k.ms) + '</a></div>';
+  if (!b.items.length) h += '<section class="bab" id="' + b.id + '"><div class="bab-head"><span class="num">Bab ' + b.n + '</span><h2>' + esc(b.name) + '</h2><span class="range">Ayat al-Quran sahaja</span></div>' + babAyat(b) + '</section>';
+  else h += '<section class="bab" id="' + b.id + '"><div class="bab-head"><span class="num">Bab ' + b.n + '</span><h2>' + esc(b.name) + '</h2>' +
+    '<span class="range">Hadis ' + b.items[0].no + '–' + b.items[b.items.length - 1].no + '</span></div>' + b.items.map(x => card(x, '')).join('') + '</section>';
+  h += '<nav class="babnav">' + (prev ? '<a href="#/bab/' + prev.n + '"><small>‹ Bab sebelumnya</small><span>' + prev.n + '. ' + esc(prev.name) + '</span></a>' : '<span></span>') +
+    (next ? '<a class="nx" href="#/bab/' + next.n + '"><small>Bab seterusnya ›</small><span>' + next.n + '. ' + esc(next.name) + '</span></a>' : '<a class="nx" href="#/kitab/' + b.k.id + '"><small>Selesai</small><span>Kembali ke senarai bab</span></a>') + '</nav>';
+  return h;
+}
+function render() {
+  const raw = $('#q').value.trim();
+  let html;
+  if (raw || onlyMarks) html = filteredHtml(raw);
+  else if (nav.v === 'kitab') html = kitabHtml(KITAB[nav.k] || KITAB[0]);
+  else if (nav.v === 'bab' && babById(nav.b)) html = babHtml(babById(nav.b));
+  else html = homeHtml();
   $('#list').innerHTML = html;
+  document.body.dataset.view = (raw || onlyMarks) ? 'search' : nav.v;
+  const cur = nav.v === 'bab' ? babById(nav.b) : null, k = cur ? cur.k : (nav.v === 'kitab' ? KITAB[nav.k] : KITAB[0]);
+  $('#index').innerHTML = sideHtml(k, cur);
 }
-function indexHtml() {
-  return '<h2>Kitab al-Muqaddimat</h2><ol>' + babs.map(b =>
-    '<li><a href="#' + b.id + '" data-bab="' + b.id + '"><span class="n">' + b.n + '</span><span>' + esc(b.name) + '</span><span class="c">' + (b.items.length ? b.items.length + ' hadis' : 'ayat') + '</span></a></li>').join('') +
-    '</ol><div class="todo">Bab 21 dan seterusnya sedang diterjemah.</div>';
+function sideHtml(k, cur) {
+  return '<a class="side-home" href="#/">‹ Utama</a><h2>' + esc(k.ms) + '</h2><ol>' + k.babs.map(b =>
+    '<li><a href="#/bab/' + b.n + '"' + (cur === b ? ' class="on"' : '') + '><span class="n">' + b.n + '</span><span>' + esc(b.name) + '</span><span class="c">' + (b.items.length ? b.items.length + ' hadis' : 'ayat') + '</span></a></li>').join('') + '</ol>';
 }
-$('#index').innerHTML = indexHtml();
-$('#sheet').innerHTML = indexHtml();
+$('#list').addEventListener('click', e => {
+  const qb = e.target.closest('[data-q]'); if (!qb) { if (e.target.closest('[data-clear]')) { e.preventDefault(); $('#q').value = ''; onlyMarks = false; $('#onlyMarks').setAttribute('aria-pressed', false); setSearch(false); go('#/'); } return; }
+  if (qb.dataset.q === 'search') setSearch(true);
+  else if (qb.dataset.q === 'marks') { onlyMarks = true; $('#onlyMarks').setAttribute('aria-pressed', true); render(); window.scrollTo(0, 0); }
+  else if (qb.dataset.q === 'notes') { e.stopPropagation(); togglePanel('#pNotes', '#btnNotes'); }
+});
+let lrT; window.addEventListener('scroll', () => { if (nav.v !== 'bab' || $('#q').value || onlyMarks) return; clearTimeout(lrT); lrT = setTimeout(() => { const n = currentNo(); if (n) store.set('rs-last', n); }, 500); }, { passive: true });
 
 function applyView() {
   document.body.classList.toggle('hide-ar', view === 'ms');
@@ -1123,7 +1272,8 @@ $('#pNotes').addEventListener('click', e => {
   if (add) { e.stopPropagation(); closePanels(); openEditor({ no: +add.dataset.addnote, type: 'umum', field: null, scope: 'saya' }); return; }
   const g = e.target.closest('[data-goto]'); if (!g) return;
   closePanels();
-  if ($('#q').value || onlyMarks) { $('#q').value = ''; onlyMarks = false; $('#onlyMarks').setAttribute('aria-pressed', false); render(); }
+  const nb = babOfNo(+g.dataset.no);
+  if (nb && (nav.v !== 'bab' || String(nav.b) !== String(nb.n) || $('#q').value || onlyMarks)) { history.replaceState(null, '', '#/bab/' + nb.n); nav = { v: 'bab', b: nb.n }; $('#q').value = ''; onlyMarks = false; $('#onlyMarks').setAttribute('aria-pressed', false); render(); }
   const mk = document.querySelector('mark.ann[data-ann="' + CSS.escape(g.dataset.goto) + '"]');
   const target = mk || document.getElementById('h' + g.dataset.no);
   if (target) { target.scrollIntoView({ block: mk ? 'center' : 'start' }); if (mk) { mk.classList.add('flash'); setTimeout(() => mk.classList.remove('flash'), 1600); } }
@@ -1141,7 +1291,7 @@ $('#barisToggle').addEventListener('click', () => { barisOn = !barisOn; store.se
 let idxHidden = store.get('rs-noidx', false);
 const wide = () => window.matchMedia('(min-width: 861px)').matches;
 function applyIdx() { document.body.classList.toggle('noindex', idxHidden); }
-$('#openIndex').addEventListener('click', () => { closePanels(); if (wide()) { idxHidden = !idxHidden; store.set('rs-noidx', idxHidden); applyIdx(); } else openSheet(); });
+$('#openIndex').addEventListener('click', () => { closePanels(); go('#/'); });
 /* Connect to shared storage */
 (async () => {
   if (!window.claude || !window.claude.use) return;
@@ -1163,7 +1313,8 @@ $('#openIndex').addEventListener('click', () => { closePanels(); if (wide()) { i
 const _render = render; render = function () {
   _render();
   if (!barisOn) document.querySelectorAll('#list .ar-text').forEach(el => { el.innerHTML = el.innerHTML.replace(HARAKAT, ''); });
-  observe(); updateToggles();
+  updateToggles();
 };
-applyTheme(); applyView(); applyAnnView(); applyNab(); applyBaris(); applyIdx(); render();
+applyTheme(); applyView(); applyAnnView(); applyNab(); applyBaris(); applyIdx(); nav = parseHash(); render();
+if (nav.h) setTimeout(() => { const el = document.getElementById('h' + nav.h); if (el) el.scrollIntoView({ block: 'start' }); }, 60);
 </script>
