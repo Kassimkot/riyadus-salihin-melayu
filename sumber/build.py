@@ -13,7 +13,7 @@ for h in d['hadith']:
     x=dict(h); x['ar']=HK.get(str(h['no'])) or clean(A[h['no']-1]['arabic']); x['baris']=str(h['no']) in HK; H.append(x)
 data={'total':1896,'hadith':H,'bab_kosong':d.get('bab_kosong',[])}
 import time
-VER=time.strftime('%Y%m%d%H%M')
+VER=time.strftime('%Y%m%d%H%M', time.gmtime(time.time()+8*3600))
 s=open('template.html').read().replace('__VERSION__',VER).replace('__DATA__',json.dumps(data,ensure_ascii=False).replace('</','<\\/'))
 open('/home/claude/riyadus-salihin-reader.html','w').write(s)
 open('/home/claude/reader/VERSION','w').write(VER)
