@@ -300,6 +300,13 @@ body.no-ann .ann::after, body.no-ann .box.guru { display: none; }
 .about-name { font-weight: 600; color: var(--jade); }
 .about-ver { font-size: 12px; color: var(--ink-soft); }
 .about-card .linkbtn { margin-top: 4px; }
+.ckrow { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 14px; }
+.ckrow .ck { display: inline-flex; align-items: center; gap: 6px; }
+.sharegrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.sharegrid button { display: flex; align-items: center; gap: 10px; border: 1px solid var(--rule); background: var(--paper); border-radius: 12px; padding: 12px; font-size: 14px; text-align: left; }
+.sharegrid button:hover { border-color: var(--jade); }
+.sharegrid button:first-child { grid-column: 1 / -1; background: var(--jade-tint); border-color: var(--jade); color: var(--jade); font-weight: 600; }
+.sharegrid .si { flex: none; width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; background: var(--jade); color: #fff; font-weight: 700; font-size: 15px; }
 </style>
 <style id="userTheme"></style>
 
@@ -511,7 +518,7 @@ function card(h, q) {
   return '<article class="hadith" id="h' + h.no + '" data-no="' + h.no + '">' +
     '<div class="h-top"><span class="h-no">' + h.no + '</span><span class="h-src">' + esc(srcLabel(h.takhrij)) + '</span>' + (h.baris ? '<span class="h-tag on" title="Baris ditambah oleh AI, belum disemak">Berbaris</span>' : '<span class="h-tag">Tanpa baris</span>') +
     '<span class="h-act"><button type="button" data-addnote="' + h.no + '" aria-label="Tambah nota umum untuk hadis ' + h.no + '">＋<span class="lbl"> Nota</span></button>' +
-    '<button type="button" data-copy="' + h.no + '" aria-label="Salin hadis ' + h.no + '">⧉<span class="lbl"> Salin</span></button>' +
+    '<button type="button" data-share="' + h.no + '" aria-label="Kongsi hadis ' + h.no + '">↗<span class="lbl"> Kongsi</span></button>' +
     '<button type="button" data-mark="' + h.no + '" aria-pressed="' + on + '" aria-label="Tanda hadis ' + h.no + '">' + (on ? '★' : '☆') + '<span class="lbl"> Tanda</span></button></span></div>' +
     '<p class="ar-text" lang="ar" dir="rtl">' + markup(h.ar, h, 'ar', q) + '</p>' +
     '<div class="ms-text" lang="ms">' + msHtml(h, q) + '</div>' +
@@ -592,6 +599,8 @@ $('#list').addEventListener('click', e => {
     if (onlyMarks) render();
     return;
   }
+  const sh = e.target.closest('[data-share]');
+  if (sh) { openShare(+sh.dataset.share); return; }
   const cp = e.target.closest('[data-copy]');
   if (cp) {
     const h = DATA.hadith.find(x => x.no === +cp.dataset.copy);
@@ -791,7 +800,7 @@ async function savePersonal(id, body, wasLocal) {
   putLocal(id, body); return 'local';
 }
 modal.addEventListener('submit', async e => {
-  e.preventDefault(); if (!editing || editing.importing) return;
+  e.preventDefault(); if (!editing || editing.importing || editing.sharing) return;
   const fd = new FormData(modal);
   const text = String(fd.get('text') || '').trim(), alt = String(fd.get('alt') || '').trim();
   if ((editing.type === 'nota' || editing.type === 'umum') && !text) { toast('Tulis nota dahulu.'); return; }
@@ -879,6 +888,116 @@ function togglePanel(p, btn) {
 }
 $('#btnView').addEventListener('click', () => togglePanel('#pView', '#btnView'));
 $('#btnNotes').addEventListener('click', () => togglePanel('#pNotes', '#btnNotes'));
+/* Share a hadith: text to any app, WhatsApp, Telegram, copy, or as an image card */
+const SITE = 'https://kassimkot.github.io/riyadus-salihin-melayu/';
+let shareOpt = Object.assign({ ar: true, ms: true, tk: true, link: true }, store.get('rs-share', {}));
+function babOf(h) { const b = babs.find(x => x.items.includes(h)); return b ? 'Bab ' + b.n + ': ' + b.name : ''; }
+function plainMs(h) { return h.ms.replace(/\{([^}]*)\}/g, '﴿$1﴾'); }
+function shareText(h) {
+  const parts = ['Riyadhus Salihin · ' + babOf(h) + ' · Hadis ' + h.no];
+  if (shareOpt.ar) parts.push(h.ar);
+  if (shareOpt.ms) parts.push(plainMs(h));
+  if (shareOpt.tk) parts.push('(' + h.takhrij + ')');
+  let t = parts.join('\n\n') + '\n\n— Draf terjemahan Melayu, belum disemak';
+  if (shareOpt.link) t += '\n' + SITE + '#h' + h.no;
+  return t;
+}
+function openShare(no) {
+  const h = HMAP.get(no); if (!h) return;
+  editing = { sharing: no };
+  const ck = (k, label) => '<label class="ck"><input type="checkbox" data-opt="' + k + '"' + (shareOpt[k] ? ' checked' : '') + '> ' + label + '</label>';
+  modal.innerHTML = '<h2>Kongsi Hadis ' + no + '</h2>' +
+    '<div class="ckrow">' + ck('ar', 'Teks Arab') + ck('ms', 'Terjemahan') + ck('tk', 'Takhrij') + ck('link', 'Pautan') + '</div>' +
+    '<div class="sharegrid">' +
+      '<button type="button" data-sh="native"><span class="si">↗</span>Kongsi ke aplikasi…</button>' +
+      '<button type="button" data-sh="wa"><span class="si" style="background:#25d366">W</span>WhatsApp</button>' +
+      '<button type="button" data-sh="tg"><span class="si" style="background:#229ed9">T</span>Telegram</button>' +
+      '<button type="button" data-sh="copy"><span class="si">⧉</span>Salin teks</button>' +
+      '<button type="button" data-sh="img"><span class="si">▣</span>Kongsi sebagai gambar</button>' +
+    '</div>' +
+    '<div class="btns"><button type="button" data-m="cancel">Tutup</button></div>';
+  modalBg.hidden = false;
+}
+modal.addEventListener('change', e => {
+  if (!editing || !editing.sharing || !e.target.dataset.opt) return;
+  shareOpt[e.target.dataset.opt] = e.target.checked;
+  if (!shareOpt.ar && !shareOpt.ms) { shareOpt.ms = true; modal.querySelector('[data-opt="ms"]').checked = true; }
+  store.set('rs-share', shareOpt);
+});
+modal.addEventListener('click', e => {
+  const b = e.target.closest('[data-sh]'); if (!b || !editing || !editing.sharing) return;
+  const h = HMAP.get(editing.sharing), how = b.dataset.sh, text = shareText(h);
+  if (how === 'img') { shareImage(h); return; }
+  closeModal();
+  if (how === 'copy') { const ok = () => toast('Hadis ' + h.no + ' disalin'); try { navigator.clipboard.writeText(text).then(ok, () => fallbackCopy(text, ok)); } catch (err) { fallbackCopy(text, ok); } return; }
+  if (how === 'wa') { openOut('https://wa.me/?text=' + encodeURIComponent(text), text); return; }
+  if (how === 'tg') { openOut('https://t.me/share/url?url=' + encodeURIComponent(SITE + '#h' + h.no) + '&text=' + encodeURIComponent(text), text); return; }
+  if (window.RSApp && typeof RSApp.shareText === 'function') { RSApp.shareText('Riyadhus Salihin · Hadis ' + h.no, text); return; }
+  if (navigator.share) { navigator.share({ title: 'Riyadhus Salihin · Hadis ' + h.no, text }).catch(() => {}); return; }
+  fallbackCopy(text, () => toast('Teks disalin. Tampal dalam mana-mana aplikasi.'));
+});
+function openOut(url, text) {
+  if (window.RSApp) { location.href = url; return; }
+  const w = window.open(url, '_blank', 'noopener');
+  if (!w) fallbackCopy(text, () => toast('Teks disalin. Tampal dalam aplikasi pilihan anda.'));
+}
+/* Image card drawn on a canvas */
+function wrapLines(ctx, text, width) {
+  const out = [];
+  text.split('\n').forEach(para => {
+    if (!para.trim()) { out.push(''); return; }
+    let line = '';
+    para.split(/\s+/).forEach(w => {
+      const t = line ? line + ' ' + w : w;
+      if (ctx.measureText(t).width > width && line) { out.push(line); line = w; } else line = t;
+    });
+    if (line) out.push(line);
+  });
+  return out;
+}
+async function shareImage(h) {
+  const btn = modal.querySelector('[data-sh="img"]'); if (btn) btn.disabled = true;
+  try { await Promise.all(['44px Amiri', 'bold 44px Amiri', '34px "Gentium Book Plus"', '26px "IBM Plex Sans"', '600 26px "IBM Plex Sans"'].map(f => document.fonts.load(f))); } catch (err) {}
+  const W = 1080, P = 80, IW = W - 2 * P;
+  const cv = document.createElement('canvas'), ctx = cv.getContext('2d');
+  const blocks = [];
+  const add = (text, font, size, color, lh, dir, gap) => { ctx.font = font; ctx.direction = dir; blocks.push({ lines: wrapLines(ctx, text, IW), font, size, color, lh, dir, gap }); };
+  add(babOf(h) + '  ·  Hadis ' + h.no, '600 26px "IBM Plex Sans", sans-serif', 26, '#8a6a1f', 38, 'ltr', 40);
+  if (shareOpt.ar) add(h.ar, '44px Amiri, serif', 44, '#1d2422', 84, 'rtl', 36);
+  if (shareOpt.ms) add(plainMs(h).replace(/\n\n/g, '\n'), '34px "Gentium Book Plus", Georgia, serif', 34, '#1d2422', 54, 'ltr', 30);
+  if (shareOpt.tk) add('(' + h.takhrij + ')', '26px "IBM Plex Sans", sans-serif', 26, '#56615d', 38, 'ltr', 0);
+  const head = 150, foot = 120;
+  const H = Math.min(16000, head + blocks.reduce((a, b) => a + b.lines.length * b.lh + b.gap, 0) + foot + 40);
+  cv.width = W; cv.height = H;
+  ctx.fillStyle = '#fbf6e9'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#0e6b58'; ctx.fillRect(0, 0, W, 120);
+  ctx.fillStyle = '#ffffff'; ctx.textBaseline = 'middle';
+  ctx.direction = 'rtl'; ctx.textAlign = 'right'; ctx.font = '52px Amiri, serif'; ctx.fillText('رياض الصالحين', W - P, 62);
+  ctx.direction = 'ltr'; ctx.textAlign = 'left'; ctx.font = '600 24px "IBM Plex Sans", sans-serif'; ctx.fillText('RIYADHUS SALIHIN · MELAYU', P, 62);
+  let y = head + 10; ctx.textBaseline = 'alphabetic';
+  blocks.forEach(b => {
+    ctx.font = b.font; ctx.fillStyle = b.color; ctx.direction = b.dir; ctx.textAlign = b.dir === 'rtl' ? 'right' : 'left';
+    b.lines.forEach(l => { y += b.lh; if (y < H - foot) ctx.fillText(l, b.dir === 'rtl' ? W - P : P, y - b.lh * 0.28); });
+    y += b.gap;
+  });
+  ctx.fillStyle = '#e2d4b5'; ctx.fillRect(P, H - foot, IW, 2);
+  ctx.fillStyle = '#6e5f4b'; ctx.direction = 'ltr'; ctx.textAlign = 'left'; ctx.font = '22px "IBM Plex Sans", sans-serif';
+  ctx.fillText('Draf terjemahan Melayu, belum disemak · Kassimnyer Apps', P, H - foot + 50);
+  ctx.fillText(SITE.replace('https://', ''), P, H - foot + 82);
+  const name = 'riyadhus-salihin-hadis-' + h.no + '.png';
+  const url = cv.toDataURL('image/png');
+  closeModal();
+  if (window.RSApp && typeof RSApp.shareImage === 'function') { RSApp.shareImage(name, url.split(',')[1]); return; }
+  const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
+  const file = new File([blob], name, { type: 'image/png' });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) { navigator.share({ files: [file], title: 'Hadis ' + h.no }).catch(() => {}); return; }
+  if (window.claude && window.claude.use) {
+    const dl = await window.claude.use('downloads').catch(() => null);
+    if (dl) { dl.save({ filename: name, data: blob }).then(() => toast('Gambar disimpan.'), err => { if (err && err.code !== 'declined') toast('Tidak dapat menyimpan gambar di sini.'); }); return; }
+  }
+  if (window.RSApp) { toast('Kemas kini aplikasi diperlukan untuk berkongsi gambar.'); return; }
+  const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); toast('Gambar dimuat turun.');
+}
 /* Notes backup */
 function exportNotes() {
   const notes = myNotes().map(a => ({ id: a.id, no: a.no, type: a.type, field: a.field || null, quote: a.quote || '', occ: a.occ || 0, text: a.text || '', alt: a.alt || '', color: a.color || '', num: a.num || '', at: a.at || 0 }));

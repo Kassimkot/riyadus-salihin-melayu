@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
     static final long RECHECK_MS = 6L * 60 * 60 * 1000;
 
     WebView web;
-    long loadedVersion = 0, lastCheck = 0;
+    long loadedVersion = 0, lastCheck = 0, openedAt = 0;
     boolean checking = false;
     String pendingSave = null;
     ValueCallback<Uri[]> fileCallback = null;
@@ -94,6 +94,7 @@ public class MainActivity extends Activity {
                 }
             });
         }
+        openedAt = System.currentTimeMillis();
         loadPage();
         checkForUpdate(false);
     }
@@ -161,9 +162,10 @@ public class MainActivity extends Activity {
                 final String apkUrl = j.optString("apk", "");
                 final String apkSha = j.optString("apk_sha256", "");
                 runOnUiThread(new Runnable() { public void run() {
-                    if (didUpdate) {
+                    if (didUpdate && (manual || System.currentTimeMillis() - openedAt < 5000)) {
+                        // just opened (or asked): swap in quietly; otherwise it is used next time the app opens
                         loadPage();
-                        Toast.makeText(MainActivity.this, "Kandungan dikemas kini", Toast.LENGTH_SHORT).show();
+                        if (manual) Toast.makeText(MainActivity.this, "Kandungan dikemas kini", Toast.LENGTH_SHORT).show();
                     } else if (manual) {
                         Toast.makeText(MainActivity.this, "Sudah versi terkini", Toast.LENGTH_SHORT).show();
                     }
@@ -310,6 +312,33 @@ public class MainActivity extends Activity {
     class Bridge {
         @JavascriptInterface public String appVersion() { return APP_VERSION_NAME; }
         @JavascriptInterface public void checkUpdate() { runOnUiThread(new Runnable() { public void run() { checkForUpdate(true); } }); }
+        @JavascriptInterface public void shareText(final String subject, final String text) {
+            runOnUiThread(new Runnable() { public void run() {
+                Intent sh = new Intent(Intent.ACTION_SEND);
+                sh.setType("text/plain");
+                sh.putExtra(Intent.EXTRA_SUBJECT, subject);
+                sh.putExtra(Intent.EXTRA_TEXT, text);
+                try { startActivity(Intent.createChooser(sh, "Kongsi hadis")); } catch (Exception ignored) { }
+            }});
+        }
+        @JavascriptInterface public void shareImage(final String name, final String base64) {
+            runOnUiThread(new Runnable() { public void run() {
+                try {
+                    File dir = new File(getCacheDir(), "share"); dir.mkdirs();
+                    File[] old = dir.listFiles(); if (old != null) for (File o : old) o.delete();
+                    String safe = name.replaceAll("[^A-Za-z0-9._-]", "_");
+                    File f = new File(dir, safe);
+                    OutputStream o = new FileOutputStream(f); o.write(android.util.Base64.decode(base64, android.util.Base64.DEFAULT)); o.close();
+                    Uri uri = Uri.parse("content://" + ShareProvider.AUTH + "/" + safe);
+                    Intent sh = new Intent(Intent.ACTION_SEND);
+                    sh.setType("image/png");
+                    sh.putExtra(Intent.EXTRA_STREAM, uri);
+                    sh.setClipData(android.content.ClipData.newRawUri("", uri));
+                    sh.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(Intent.createChooser(sh, "Kongsi gambar hadis"));
+                } catch (Exception e) { Toast.makeText(MainActivity.this, "Tidak dapat berkongsi gambar", Toast.LENGTH_SHORT).show(); }
+            }});
+        }
         @JavascriptInterface public void shareFile(final String name, final String content) {
             runOnUiThread(new Runnable() { public void run() {
                 pendingSave = content;
