@@ -38,7 +38,11 @@ for x in H:
 for e in d.get('bab_kosong',[]):
     for f in ('penutup_ms',):
         if e.get(f): e[f]=honor(e[f])
-data={'total':1896,'hadith':H,'bab_kosong':d.get('bab_kosong',[])}
+intro=d.get('bab_intro',{})
+for L in intro.values():
+    for a in L:
+        if a.get('nota'): a['nota']=honor(a['nota'])
+data={'total':1896,'hadith':H,'bab_kosong':d.get('bab_kosong',[]),'bab_intro':intro}
 import time
 VER=time.strftime('%Y%m%d%H%M', time.gmtime(time.time()+8*3600))
 s=open('template.html').read().replace('__VERSION__',VER).replace('__DATA__',json.dumps(data,ensure_ascii=False).replace('</','<\\/'))

@@ -174,6 +174,11 @@ mark { background: var(--mark); color: inherit; border-radius: 2px; padding: 0 1
 .ayat-ar { color: var(--jade); }
 .ayat-tr { font-family: var(--font-ui); font-size: calc(14px * var(--scale)); line-height: 1.6; color: var(--ink-soft); margin: 0; max-width: 68ch; }
 .bab-ayat .box.quran { margin-top: 14px; }
+.bab-intro { margin: 6px 0 18px; border: 1px solid var(--rule); border-radius: 10px; padding: 0 16px 14px; background: color-mix(in srgb, var(--jade) 4%, transparent); }
+.bab-intro > summary { cursor: pointer; font-family: var(--font-ui); font-size: 13px; font-weight: 600; color: var(--jade); padding: 12px 0; list-style-position: inside; }
+.bab-intro > summary span { font-weight: 400; color: var(--ink-soft); margin-left: 6px; }
+.bab-intro .ayat-item:last-of-type { border-bottom: 0; }
+.intro-nota p { font-family: var(--font-ui); font-size: calc(14px * var(--scale)); line-height: 1.6; color: var(--ink-soft); font-style: italic; margin: 0; max-width: 68ch; }
 .ms-text a { color: var(--jade); }
 .bab-nota { font-family: var(--font-ui); font-size: 14px; color: var(--ink-soft); line-height: 1.6; padding-block: 14px 0; margin: 0; max-width: 68ch; }
 .empty { font-family: var(--font-ui); color: var(--ink-soft); padding: 40px 0; text-align: center; }
@@ -587,6 +592,18 @@ function babAyat(b) {
   h += '<div class="box quran"><div class="src">' + esc(e.sumber || '') + '</div></div></div>';
   return h;
 }
+function introHtml(b) {
+  const L = b.intro; if (!L) return '';
+  const nv = L.filter(x => x.ar).length;
+  let h = '<details class="bab-intro" open><summary>Ayat al-Quran di awal bab <span>' + nv + ' ayat</span></summary><div class="bab-ayat">', first = true;
+  L.forEach(a => {
+    if (a.nota) { h += '<div class="ayat-item intro-nota"><p>' + esc(a.nota) + '</p></div>'; return; }
+    h += '<div class="ayat-item"><div class="ayat-lead">' + (first ? 'Allah Ta‘ala berfirman:' : 'Dan firman-Nya:') + ' <span class="ref">' + esc(a.ref) + '</span></div>' +
+      '<p class="ar-text ayat-ar" lang="ar" dir="rtl">﴿' + esc(a.ar) + '﴾</p><p class="ayat-tr">' + esc(a.tr) + '</p></div>';
+    first = false;
+  });
+  return h + '<div class="box quran"><div class="src">Teks ayat: Mushaf Uthmani (riwayat Hafs). Terjemahan: Kemenag RI. Bahagian ayat yang dipetik mengikut petikan an-Nawawi.</div></div></div></details>';
+}
 /* ---------- Kitab structure, routing (home → kitab → bab), resume reading ---------- */
 const KITAB = [
   [0, 'كتاب المقدمات', 'Kitab al-Muqaddimat', 'Pendahuluan: akhlak dan amalan asas', 1, 679],
@@ -611,6 +628,7 @@ const KITAB = [
   [19, 'كتاب الاستغفار', 'Kitab Istighfar', 'Memohon keampunan', 1869, 1896]
 ].map(([id, ar, ms, sub, from, to]) => ({ id, ar, ms, sub, from, to, babs: [] }));
 const kitabOfNo = no => KITAB.find(k => no >= k.from && no <= k.to) || KITAB[0];
+babs.forEach(b => { b.intro = (DATA.bab_intro || {})[b.n] || null; });
 { let last = KITAB[0]; babs.forEach(b => { const k = b.items.length ? kitabOfNo(b.items[0].no) : last; b.k = k; k.babs.push(b); last = k; }); }
 const babById = n => babs.find(b => String(b.n) === String(n));
 const babOfNo = no => babs.find(b => b.items.some(h => h.no === no));
@@ -697,7 +715,7 @@ function babHtml(b) {
   let h = '<div class="crumbs"><a href="#/">Utama</a><span>›</span><a href="#/kitab/' + b.k.id + '">' + esc(b.k.ms) + '</a></div>';
   if (!b.items.length) h += '<section class="bab" id="' + b.id + '"><div class="bab-head"><span class="num">Bab ' + b.n + '</span><h2>' + esc(b.name) + '</h2><span class="range">Ayat al-Quran sahaja</span></div>' + babAyat(b) + '</section>';
   else h += '<section class="bab" id="' + b.id + '"><div class="bab-head"><span class="num">Bab ' + b.n + '</span><h2>' + esc(b.name) + '</h2>' +
-    '<span class="range">Hadis ' + b.items[0].no + '–' + b.items[b.items.length - 1].no + '</span></div>' + b.items.map(x => card(x, '')).join('') + '</section>';
+    '<span class="range">Hadis ' + b.items[0].no + '–' + b.items[b.items.length - 1].no + '</span></div>' + introHtml(b) + b.items.map(x => card(x, '')).join('') + '</section>';
   h += '<nav class="babnav">' + (prev ? '<a href="#/bab/' + prev.n + '"><small>‹ Bab sebelumnya</small><span>' + prev.n + '. ' + esc(prev.name) + '</span></a>' : '<span></span>') +
     (next ? '<a class="nx" href="#/bab/' + next.n + '"><small>Bab seterusnya ›</small><span>' + next.n + '. ' + esc(next.name) + '</span></a>' : '<a class="nx" href="#/kitab/' + b.k.id + '"><small>Selesai</small><span>Kembali ke senarai bab</span></a>') + '</nav>';
   return h;
