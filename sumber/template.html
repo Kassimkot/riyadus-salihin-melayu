@@ -362,7 +362,7 @@ body[data-view="home"] .wrap, body[data-view="kitab"] .wrap { grid-template-colu
   <div class="bar-in">
     <div class="brand"><span class="ar">رياض الصالحين</span><span class="lat">Riyadhus Salihin · Melayu</span></div>
     <div class="tools" role="toolbar" aria-label="Alat">
-      <button type="button" class="tb" id="openIndex" title="Utama: senarai kitab dan bab" aria-label="Utama"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <button type="button" class="tb" id="openIndex" title="Senarai bab / kitab" aria-label="Senarai"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
       <button type="button" class="tb" id="btnView" title="Paparan" aria-label="Paparan" aria-expanded="false" aria-controls="pView"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
       <button type="button" class="tb" id="btnNotes" title="Nota saya" aria-label="Nota saya" aria-expanded="false" aria-controls="pNotes"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5z"/><path d="M9 3v18M3 7h4M3 11h4M3 15h4"/></svg><span class="badge" id="noteCount" hidden></span></button>
       <button type="button" class="tb" id="btnSearch" title="Cari" aria-label="Cari" aria-expanded="false"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
@@ -1206,8 +1206,17 @@ window.rsBack = function () {
   if (['#pView', '#pNotes', '#pSet'].some(p => !$(p).hidden)) { closePanels(); return true; }
   if (!$('#searchRow').hidden) { setSearch(false); return true; }
   if (!selbar.hidden) { try { window.getSelection().removeAllRanges(); } catch (err) {} hideSelbar(); return true; }
+  const up = upHash();
+  if (up) { go(up); return true; }
   return false;
 };
+/* One level up: search/starred → where you were, bab → its kitab's bab list, kitab → home, home → nothing (exit) */
+function upHash() {
+  if ($('#q').value || onlyMarks) return location.hash || '#/';
+  if (nav.v === 'bab') { const b = babById(nav.b); return '#/kitab/' + (b ? b.k.id : 0); }
+  if (nav.v === 'kitab') return '#/';
+  return null;
+}
 /* Settings: theme and colours (saved on this device) */
 const PAL = {
   hl: [['kuning', '#fbe7a6', '#5a4b1c'], ['hijau', '#cfe9d9', '#1f4a39'], ['merah jambu', '#f6d3dc', '#5a2a37'], ['biru', '#d3e4f7', '#1e3a57'], ['ungu', '#e4d8f3', '#3e2d57'], ['oren', '#fbdcc0', '#5a3a1c'], ['pudina', '#c9efe8', '#1c4a45'], ['kelabu', '#e3e3de', '#3a3d3b']],
@@ -1296,7 +1305,7 @@ $('#barisToggle').addEventListener('click', () => { barisOn = !barisOn; store.se
 let idxHidden = store.get('rs-noidx', false);
 const wide = () => window.matchMedia('(min-width: 861px)').matches;
 function applyIdx() { document.body.classList.toggle('noindex', idxHidden); }
-$('#openIndex').addEventListener('click', () => { closePanels(); go('#/'); });
+$('#openIndex').addEventListener('click', () => { closePanels(); go(upHash() || '#/'); });
 /* Connect to shared storage */
 (async () => {
   if (!window.claude || !window.claude.use) return;
