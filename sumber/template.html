@@ -350,9 +350,9 @@ body.no-ann .ann::after, body.no-ann .box.guru { display: none; }
 .bablist a { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; text-decoration: none; color: var(--ink); background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; font-size: 16px; }
 .bablist a:hover { border-color: var(--jade); }
 .bablist .n { font-family: var(--font-ui); color: var(--gold); font-weight: 600; }
-.zoom-ghost { position: fixed; z-index: 4; pointer-events: none; border: 1px solid var(--rule); box-sizing: border-box; }
+.zoom-ghost { position: fixed; z-index: 4; pointer-events: none; border: 1.5px solid color-mix(in srgb, var(--jade) 45%, transparent); box-sizing: border-box; }
 @keyframes cameFrom { 0%, 100% { box-shadow: 0 0 0 0 transparent; } 18%, 55% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--jade) 30%, transparent); border-color: var(--jade); background: color-mix(in srgb, var(--jade) 9%, var(--sheet)); } }
-.came-from { animation: cameFrom 1.9s ease-out .15s; }
+.came-from { animation: cameFrom 2s ease-out .45s; }
 @media (prefers-reduced-motion: reduce) { .came-from { animation-duration: 2.4s; } }
 .bablist .c { font-family: var(--font-ui); font-size: 12px; color: var(--ink-soft); white-space: nowrap; }
 .babnav { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 36px; }
@@ -655,23 +655,24 @@ const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 function stageRect() { const t = Math.max(0, $('.bar').getBoundingClientRect().bottom); return { top: t, left: 0, width: innerWidth, height: innerHeight - t }; }
 const box = (r, rad) => ({ top: r.top + 'px', left: r.left + 'px', width: r.width + 'px', height: r.height + 'px', borderRadius: rad });
 function ghost(bg) { const g = document.createElement('div'); g.className = 'zoom-ghost'; g.style.background = bg; document.body.appendChild(g); return g; }
-function settle(r, scaleFrom, delayFade) {
+const ZOOM_MS = 560, ZOOM_EASE = 'cubic-bezier(.32,.08,.24,1)';
+function settle(r, scaleFrom) {
   const L = $('#list'), lr = L.getBoundingClientRect();
   L.style.transformOrigin = (r.left + r.width / 2 - lr.left) + 'px ' + (r.top + r.height / 2 - lr.top) + 'px';
-  L.animate([{ opacity: 0, transform: 'scale(' + scaleFrom + ')' }, { opacity: 0, offset: delayFade }, { opacity: 1, transform: 'scale(1)' }],
-    { duration: 320, easing: 'cubic-bezier(.2,0,0,1)' }).onfinish = () => { L.style.transformOrigin = ''; };
+  L.animate([{ opacity: 0, transform: 'scale(' + scaleFrom + ')' }, { opacity: .55, offset: .45 }, { opacity: 1, transform: 'scale(1)' }],
+    { duration: ZOOM_MS, easing: ZOOM_EASE }).onfinish = () => { L.style.transformOrigin = ''; };
 }
 function zoomIn(r) {
-  const F = stageRect(), g = ghost(getComputedStyle(document.body).getPropertyValue('--sheet'));
-  g.animate([{ ...box(r, '10px'), opacity: 1 }, { ...box(F, '0px'), opacity: 1, offset: .7 }, { ...box(F, '0px'), opacity: 0 }],
-    { duration: 330, easing: 'cubic-bezier(.2,0,0,1)', fill: 'forwards' }).onfinish = () => g.remove();
-  settle(r, .94, .45);
+  const F = stageRect(), g = ghost('color-mix(in srgb, var(--jade) 7%, transparent)');
+  g.animate([{ ...box(r, '10px'), opacity: .9 }, { ...box(F, '14px'), opacity: .5, offset: .6 }, { ...box(F, '0px'), opacity: 0 }],
+    { duration: ZOOM_MS, easing: ZOOM_EASE, fill: 'forwards' }).onfinish = () => g.remove();
+  settle(r, .9);
 }
 function zoomOut(r) {
-  const F = stageRect(), g = ghost(getComputedStyle(document.body).getPropertyValue('--sheet'));
-  g.animate([{ ...box(F, '0px'), opacity: 1 }, { ...box(r, '10px'), opacity: .85, offset: .75 }, { ...box(r, '10px'), opacity: 0 }],
-    { duration: 330, easing: 'cubic-bezier(.2,0,0,1)', fill: 'forwards' }).onfinish = () => g.remove();
-  settle(r, 1.05, .2);
+  const F = stageRect(), g = ghost('color-mix(in srgb, var(--jade) 7%, transparent)');
+  g.animate([{ ...box(F, '0px'), opacity: 0 }, { ...box(F, '14px'), opacity: .5, offset: .2 }, { ...box(r, '10px'), opacity: .9, offset: .85 }, { ...box(r, '10px'), opacity: 0 }],
+    { duration: ZOOM_MS, easing: ZOOM_EASE, fill: 'forwards' }).onfinish = () => g.remove();
+  settle(r, 1.08);
 }
 function cameFrom(el) { el.classList.remove('came-from'); void el.offsetWidth; el.classList.add('came-from'); setTimeout(() => el.classList.remove('came-from'), 2200); }
 function transition(a, b) {
