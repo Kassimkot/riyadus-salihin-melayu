@@ -350,6 +350,10 @@ body.no-ann .ann::after, body.no-ann .box.guru { display: none; }
 .bablist a { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; text-decoration: none; color: var(--ink); background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; font-size: 16px; }
 .bablist a:hover { border-color: var(--jade); }
 .bablist .n { font-family: var(--font-ui); color: var(--gold); font-weight: 600; }
+.zoom-ghost { position: fixed; z-index: 4; pointer-events: none; border: 1px solid var(--rule); box-sizing: border-box; }
+@keyframes cameFrom { 0%, 100% { box-shadow: 0 0 0 0 transparent; } 18%, 55% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--jade) 30%, transparent); border-color: var(--jade); background: color-mix(in srgb, var(--jade) 9%, var(--sheet)); } }
+.came-from { animation: cameFrom 1.9s ease-out .15s; }
+@media (prefers-reduced-motion: reduce) { .came-from { animation-duration: 2.4s; } }
 .bablist .c { font-family: var(--font-ui); font-size: 12px; color: var(--ink-soft); white-space: nowrap; }
 .babnav { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 36px; }
 .babnav a { display: grid; gap: 2px; text-decoration: none; color: var(--ink); border: 1px solid var(--rule); background: var(--sheet); border-radius: 12px; padding: 12px 14px; }
@@ -643,13 +647,54 @@ function parseHash() {
   return { v: 'home' };
 }
 function go(hash) { if (location.hash === hash) route(); else location.hash = hash; }
+/* ---------- Zoom transitions between levels (home → kitab → bab) + "came from" glow ---------- */
+const DEPTH = { home: 0, kitab: 1, bab: 2 };
+let tapRect = null;
+document.addEventListener('click', e => { const a = e.target.closest('#list a[href^="#"]'); tapRect = a ? a.getBoundingClientRect() : null; }, true);
+const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+function stageRect() { const t = Math.max(0, $('.bar').getBoundingClientRect().bottom); return { top: t, left: 0, width: innerWidth, height: innerHeight - t }; }
+const box = (r, rad) => ({ top: r.top + 'px', left: r.left + 'px', width: r.width + 'px', height: r.height + 'px', borderRadius: rad });
+function ghost(bg) { const g = document.createElement('div'); g.className = 'zoom-ghost'; g.style.background = bg; document.body.appendChild(g); return g; }
+function settle(r, scaleFrom, delayFade) {
+  const L = $('#list'), lr = L.getBoundingClientRect();
+  L.style.transformOrigin = (r.left + r.width / 2 - lr.left) + 'px ' + (r.top + r.height / 2 - lr.top) + 'px';
+  L.animate([{ opacity: 0, transform: 'scale(' + scaleFrom + ')' }, { opacity: 0, offset: delayFade }, { opacity: 1, transform: 'scale(1)' }],
+    { duration: 320, easing: 'cubic-bezier(.2,0,0,1)' }).onfinish = () => { L.style.transformOrigin = ''; };
+}
+function zoomIn(r) {
+  const F = stageRect(), g = ghost(getComputedStyle(document.body).getPropertyValue('--sheet'));
+  g.animate([{ ...box(r, '10px'), opacity: 1 }, { ...box(F, '0px'), opacity: 1, offset: .7 }, { ...box(F, '0px'), opacity: 0 }],
+    { duration: 330, easing: 'cubic-bezier(.2,0,0,1)', fill: 'forwards' }).onfinish = () => g.remove();
+  settle(r, .94, .45);
+}
+function zoomOut(r) {
+  const F = stageRect(), g = ghost(getComputedStyle(document.body).getPropertyValue('--sheet'));
+  g.animate([{ ...box(F, '0px'), opacity: 1 }, { ...box(r, '10px'), opacity: .85, offset: .75 }, { ...box(r, '10px'), opacity: 0 }],
+    { duration: 330, easing: 'cubic-bezier(.2,0,0,1)', fill: 'forwards' }).onfinish = () => g.remove();
+  settle(r, 1.05, .2);
+}
+function cameFrom(el) { el.classList.remove('came-from'); void el.offsetWidth; el.classList.add('came-from'); setTimeout(() => el.classList.remove('came-from'), 2200); }
+function transition(a, b) {
+  const da = DEPTH[a.v], db = DEPTH[b.v], r = tapRect; tapRect = null;
+  if (da === undefined || db === undefined || da === db) return;
+  if (db > da) { if (r && !calm()) zoomIn(r); return; }
+  let sel;
+  if (a.v === 'bab') { const ab = babById(a.b); sel = db === 1 ? 'a[href="#/bab/' + a.b + '"]' : (ab ? 'a[href="#/kitab/' + ab.k.id + '"]' : null); }
+  else sel = 'a[href="#/kitab/' + a.k + '"]';
+  const el = sel && $('#list').querySelector(sel); if (!el) return;
+  el.scrollIntoView({ block: 'center', behavior: 'instant' });
+  if (!calm()) zoomOut(el.getBoundingClientRect());
+  cameFrom(el);
+}
 function route() {
+  const prevNav = nav, wasFiltered = !!($('#q').value || onlyMarks);
   nav = parseHash();
   if ($('#q').value || onlyMarks) { $('#q').value = ''; onlyMarks = false; $('#onlyMarks').setAttribute('aria-pressed', false); $('#searchRow').hidden = true; $('#btnSearch').setAttribute('aria-expanded', false); }
   closeSheet(); closePop(); closePanels();
   render();
   if (nav.h) { const el = document.getElementById('h' + nav.h); if (el) el.scrollIntoView({ block: 'start', behavior: 'instant' }); }
   else window.scrollTo({ top: 0, behavior: 'instant' });
+  if (!wasFiltered) transition(prevNav, nav); else tapRect = null;
   if (nav.v === 'bab') { const b = babById(nav.b); const n = nav.h || (b && b.items[0] && b.items[0].no); if (n) store.set('rs-last', n); }
 }
 window.addEventListener('hashchange', route);
