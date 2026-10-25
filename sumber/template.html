@@ -586,11 +586,7 @@ function babAyat(b) {
   const e = b.raw || {};
   if (!e.ayat) return '<p class="bab-nota">' + esc(b.nota || '') + '</p>';
   let h = '<div class="bab-ayat">';
-  e.ayat.forEach((a, i) => {
-    h += '<div class="ayat-item"><div class="ayat-lead">' + (i === 0 ? 'Allah Ta‘ala berfirman:' : 'Dan firman-Nya:') + ' <span class="ref">' + esc(a.rujukan) + '</span></div>' +
-      '<p class="ar-text ayat-ar" lang="ar" dir="rtl">﴿' + esc(a.ar) + '﴾</p>' +
-      '<p class="ayat-tr">' + esc(a.terjemahan) + '</p></div>';
-  });
+  e.ayat.forEach((a, i) => { h += ayatBlock(b.ayatNos[i], i === 0 ? 'Allah Ta‘ala berfirman:' : 'Dan firman-Nya:'); });
   if (e.penutup_ar) h += '<div class="ayat-item"><p class="ar-text" lang="ar" dir="rtl">' + esc(e.penutup_ar) + '</p><div class="ms-text"><p>' + esc(e.penutup_ms) +
     (e.rujuk ? ' <a href="#h' + e.rujuk + '">(Hadis ' + e.rujuk + ')</a>' : '') + '</p></div></div>';
   h += '<div class="box quran"><div class="src">' + esc(e.sumber || '') + '</div></div></div>';
@@ -599,12 +595,10 @@ function babAyat(b) {
 function introHtml(b) {
   const L = b.intro; if (!L) return '';
   const nv = L.filter(x => x.ar).length;
-  let h = '<details class="bab-intro" open><summary>Ayat al-Quran di awal bab <span>' + nv + ' ayat</span></summary><div class="bab-ayat">', first = true;
+  let h = '<details class="bab-intro" open><summary>Ayat al-Quran di awal bab <span>' + nv + ' ayat</span></summary><div class="bab-ayat">', k = 0;
   L.forEach(a => {
     if (a.nota) { h += '<div class="ayat-item intro-nota"><p>' + esc(a.nota) + '</p></div>'; return; }
-    h += '<div class="ayat-item"><div class="ayat-lead">' + (first ? 'Allah Ta‘ala berfirman:' : 'Dan firman-Nya:') + ' <span class="ref">' + esc(a.ref) + '</span></div>' +
-      '<p class="ar-text ayat-ar" lang="ar" dir="rtl">﴿' + esc(a.ar) + '﴾</p><p class="ayat-tr">' + esc(a.tr) + '</p></div>';
-    first = false;
+    h += ayatBlock(b.ayatNos[k], k === 0 ? 'Allah Ta‘ala berfirman:' : 'Dan firman-Nya:'); k++;
   });
   return h + '<div class="box quran"><div class="src">Teks ayat: Mushaf Uthmani (riwayat Hafs). Terjemahan: Kemenag RI. Bahagian ayat yang dipetik mengikut petikan an-Nawawi.</div></div></div></details>';
 }
@@ -633,9 +627,29 @@ const KITAB = [
 ].map(([id, ar, ms, sub, from, to]) => ({ id, ar, ms, sub, from, to, babs: [] }));
 const kitabOfNo = no => KITAB.find(k => no >= k.from && no <= k.to) || KITAB[0];
 babs.forEach(b => { b.intro = (DATA.bab_intro || {})[b.n] || null; });
+/* Quran verses (bab openings, verse-only babs) as annotatable entries: no = 100000 + bab*100 + i */
+const isAyatNo = no => no >= 100000;
+const ayatBabN = no => String(Math.floor((no - 100000) / 100));
+babs.forEach(b => {
+  const L = b.intro ? b.intro.filter(a => a.ar).map(a => ({ ar: a.ar, tr: a.tr, ref: a.ref })) : (b.raw && b.raw.ayat ? b.raw.ayat.map(a => ({ ar: a.ar, tr: a.terjemahan, ref: a.rujukan })) : []);
+  b.ayatNos = L.map((a, i) => { const no = 100000 + (+b.n) * 100 + i + 1; HMAP.set(no, { no, ar: a.ar, ms: a.tr, ref: a.ref, isAyat: true, bab: b.n }); return no; });
+});
+function noLabel(no) { const h = HMAP.get(no); return h && h.isAyat ? 'Ayat · Bab ' + h.bab + ' · ' + h.ref : 'Hadis ' + no; }
+function sortKeyNo(no) {
+  if (!isAyatNo(no)) return no;
+  const i = babs.findIndex(b => String(b.n) === ayatBabN(no)); let f = null;
+  for (let j = i; j < babs.length && f === null; j++) if (babs[j].items.length) f = babs[j].items[0].no;
+  return (f === null ? 1e6 : f) - 0.5 + (no % 100) / 1000;
+}
+function ayatBlock(no, lead) {
+  const h = HMAP.get(no); prepAnns(h);
+  return '<div class="ayat-item" data-ayat id="h' + no + '" data-no="' + no + '"><div class="ayat-lead">' + lead + ' <span class="ref">' + esc(h.ref) + '</span></div>' +
+    '<p class="ar-text ayat-ar" lang="ar" dir="rtl">﴿' + markup(h.ar, h, 'ar', '') + '﴾</p><p class="ayat-tr">' + markup(h.ms, h, 'ms', '') + '</p>' +
+    (h._s.length ? '<div class="box saya"><h3>Nota saya</h3><ol class="ann-list">' + h._s.map(annItem).join('') + '</ol></div>' : '') + '</div>';
+}
 { let last = KITAB[0]; babs.forEach(b => { const k = b.items.length ? kitabOfNo(b.items[0].no) : last; b.k = k; k.babs.push(b); last = k; }); }
 const babById = n => babs.find(b => String(b.n) === String(n));
-const babOfNo = no => babs.find(b => b.items.some(h => h.no === no));
+const babOfNo = no => isAyatNo(no) ? babById(ayatBabN(no)) : babs.find(b => b.items.some(h => h.no === no));
 let nav = { v: 'home' };
 function parseHash() {
   const h = decodeURIComponent(location.hash || '');
@@ -907,7 +921,7 @@ function drawSelbar(hint) {
       '<button type="button" class="tool ul" data-sel="garis">Garis</button>' +
       '<button type="button" class="tool" data-sel="nombor" title="Letak nombor">' + SVG_NUM + ' Nombor</button>' +
       '<button type="button" class="tool" data-sel="nota">Nota</button>' +
-      (pending.field === 'ms' ? '<button type="button" class="tool" data-sel="pindaan">Pindaan</button>' : '') + '</span>';
+      (pending.field === 'ms' && !isAyatNo(pending.no) ? '<button type="button" class="tool" data-sel="pindaan">Pindaan</button>' : '') + '</span>';
   }
   selbar.innerHTML = '<div class="srow"><span class="q" dir="auto">' + q + '</span>' + top + '</div>' + (tools ? '<div class="trow">' + tools + '</div>' : '');
   selbar.hidden = false; document.body.classList.add('selon');
@@ -919,8 +933,8 @@ function readSelection() {
   if (!sel || !sel.rangeCount || sel.isCollapsed) { hideSelbar(); return; }
   const r = sel.getRangeAt(0);
   const node = r.commonAncestorContainer.nodeType === 1 ? r.commonAncestorContainer : r.commonAncestorContainer.parentElement;
-  const box = node && node.closest('.ms-text, .ar-text');
-  const art = box && box.closest('.hadith');
+  const box = node && node.closest('.ms-text, .ar-text, .ayat-tr');
+  const art = box && box.closest('.hadith, [data-ayat]');
   if (!art) { hideSelbar(); return; }
   const h = HMAP.get(+art.dataset.no);
   const field = box.classList.contains('ar-text') ? 'ar' : 'ms';
@@ -973,7 +987,7 @@ function closeModal() { modalBg.hidden = true; modal.innerHTML = ''; editing = n
 function openEditor(a) {
   editing = a;
   const isNew = !a.id, type = a.type;
-  let html = '<h2>' + (isNew ? 'Tambah ' : 'Sunting ') + esc((KIND[type] || 'Nota').toLowerCase()) + ' · Hadis ' + a.no + '</h2>';
+  let html = '<h2>' + (isNew ? 'Tambah ' : 'Sunting ') + esc((KIND[type] || 'Nota').toLowerCase()) + ' · ' + esc(noLabel(a.no)) + '</h2>';
   if (a.field) html += '<div class="quote" lang="' + (a.field === 'ar' ? 'ar' : 'ms') + '">' + esc(a.quote) + '</div>';
   if (isNew && canWrite) html += '<div class="scope" role="radiogroup" aria-label="Siapa boleh melihat"><label><input type="radio" name="scope" id="sc-guru" value="guru"' + (a.scope !== 'saya' ? ' checked' : '') + '> Untuk semua pelajar</label><label><input type="radio" name="scope" id="sc-saya" value="saya"' + (a.scope === 'saya' ? ' checked' : '') + '> Saya sahaja</label></div>';
   if (type === 'serlah' || type === 'garis') {
@@ -1071,7 +1085,7 @@ $('#altToggle').addEventListener('click', () => { altInline = !altInline; store.
 function myNotes() {
   const out = [];
   for (const m of [MINE_DB, MINE_LOCAL]) for (const [no, l] of m) { const h = HMAP.get(no); if (!h) continue; l.forEach(a => out.push(Object.assign({ pos: a.field ? findOcc(h[a.field] || '', a.quote || '', a.occ || 0) : 1e9 }, a))); }
-  return out.sort((a, b) => a.no - b.no || (a.field === b.field ? 0 : a.field === 'ar' ? -1 : 1) || a.pos - b.pos);
+  return out.sort((a, b) => sortKeyNo(a.no) - sortKeyNo(b.no) || (a.field === b.field ? 0 : a.field === 'ar' ? -1 : 1) || a.pos - b.pos);
 }
 function currentNo() {
   const top = $('.bar').getBoundingClientRect().bottom + 8;
@@ -1083,7 +1097,7 @@ function notesHtml() {
   const sw = a => a.type === 'serlah' ? '<span class="chip" style="background:var(--hl-' + esc(a.color || 'y') + ')"></span>' : a.type === 'garis' ? '<span class="chip" style="background:var(--ul-' + esc(a.color || 'p') + ')"></span>' : a.type === 'nombor' ? '<span class="chip" style="background:var(--jade);color:var(--sheet);width:auto;height:auto;padding:0 5px;border-radius:7px;font-size:10px;vertical-align:0">' + esc(a.num || '') + '</span>' : '';
   return '<button type="button" class="addn" data-addnote="' + cur + '">＋ Tambah nota pada Hadis ' + cur + '</button>' +
     '<div class="prow"><span class="plbl">Nota saya · ' + list.length + '</span>' +
-    (list.length ? '<ol class="nlist">' + list.map(a => '<li><button type="button" data-goto="' + esc(a.id) + '" data-no="' + a.no + '"><span class="meta">' + sw(a) + 'Hadis ' + a.no + ' · ' + esc(KIND[a.type] || 'Nota') + '</span>' +
+    (list.length ? '<ol class="nlist">' + list.map(a => '<li><button type="button" data-goto="' + esc(a.id) + '" data-no="' + a.no + '"><span class="meta">' + sw(a) + esc(noLabel(a.no)) + ' · ' + esc(KIND[a.type] || 'Nota') + '</span>' +
       (a.quote ? '<span class="qt"' + (a.field === 'ar' ? ' lang="ar" dir="rtl"' : '') + '>' + esc(a.quote) + '</span>' : '') +
       (a.type === 'pindaan' && a.alt ? '<span class="tx">→ ' + esc(a.alt) + '</span>' : '') + (a.text ? '<span class="tx">' + esc(a.text) + '</span>' : '') + '</button></li>').join('') + '</ol>'
       : '<p style="margin:0;color:var(--ink-soft)">Belum ada nota. Tekan ikon pen dan pilih teks untuk mula menanda.</p>') + '</div>';
